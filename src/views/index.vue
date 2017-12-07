@@ -12,7 +12,7 @@
         </a>
         <!-- Navbar Right Menu -->
         <div class="navbar-custom-menu">
-          <ul class="nav navbar-nav">  
+          <ul class="nav navbar-nav">
             <!-- Notifications Menu -->
             <li class="dropdown notifications-menu">
               <a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown">
@@ -36,27 +36,23 @@
         </div>
       </nav>
     </header>
-    
+
    <!-- Left side column. contains the logo and sidebar -->
     <sidebar display-name="www" picture-url="/static/img/avator.png" />
-  
+
     <!-- Content Wrapper. Contains page content -->
     <div class="content-wrapper">
       <!-- Content Header (Page header) -->
       <section class="content-header">
-        <h1>
-          11111
-          <small>222</small>
-        </h1>
         <ol class="breadcrumb">
           <li>
             <a href="javascript:;">
-              <i class="fa fa-home"></i>Home</a>
+              <i class="fa fa-home"></i>首页</a>
           </li>
-          <li class="active">111</li>
+          <li class="active">{{$route.name}}</li>
         </ol>
       </section>
-  
+
       <router-view></router-view>
     </div>
     <!-- Main Footer -->
@@ -82,10 +78,10 @@ export default {
     }
   },
   computed: {
-    
+
   },
   methods: {
-  
+
   }
 }
 </script>
@@ -141,4 +137,10 @@ hr.visible-xs-block {
   height: 1px;
   border-color: transparent;
 }
+.content-header .breadcrumb{
+  left:10px;
+  font-size:14px;
+  float:none
+}
+
 </style>

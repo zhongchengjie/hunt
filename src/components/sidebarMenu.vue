@@ -1,6 +1,6 @@
 <template>
   <ul class="sidebar-menu">
-    <router-link tag="li" class="pageLink" to="">
+    <router-link tag="li" class="pageLink" to="/user">
       <a>
         <i class="fa fa-desktop"></i>
         <span class="page">用户管理</span>
