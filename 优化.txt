@@ -1,0 +1,2 @@
+1、去掉jquery和boostrap.min.js
+2、modal的优化

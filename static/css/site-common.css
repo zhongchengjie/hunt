@@ -1,0 +1,35 @@
+.content-header{
+    min-height: 42px;
+}
+
+.ibox {
+	margin-bottom: 20px;
+	background: #fff
+}
+
+.ibox .ibox-title {
+	border-color: #e7eaec;
+	border-style: solid none none;
+	border-width: 2px 0 0;
+	color: #676A6C;
+	margin-bottom: 0;
+	padding: 15px 15px 7px;
+	min-height: 48px
+}
+
+.ibox .ibox-title h5{
+	font-size: 14px;
+    margin: 0 0 7px;
+    font-weight: 600
+}
+   
+.ibox .ibox-content {
+    padding: 15px 20px 20px 20px;
+    border-color: #e7eaec;
+    border-style: solid none none;
+    border-width: 1px 0;
+}
+
+.ibox .ibox-content-search{
+	margin-bottom: 20px
+}
