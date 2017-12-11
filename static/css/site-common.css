@@ -22,7 +22,7 @@
     margin: 0 0 7px;
     font-weight: 600
 }
-   
+
 .ibox .ibox-content {
     padding: 15px 20px 20px 20px;
     border-color: #e7eaec;
@@ -32,4 +32,19 @@
 
 .ibox .ibox-content-search{
 	margin-bottom: 20px
+}
+
+.v--modal-box .modal-body{padding:15px 15px 0}
+
+.table tr td{
+    color: #777;
+    font-size: 13px;
+}
+.table-edit tr td{
+   padding:6px;
+
+}
+
+.table-edit tr td:nth-child(odd){
+   text-align: right;
 }
