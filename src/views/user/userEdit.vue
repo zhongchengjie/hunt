@@ -1,5 +1,6 @@
 <template>
-    <form name="userEditForm" id="userEditForm" autocomplete="off">
+    <form name="userEditForm"  autocomplete="off">
+    	<input type="hidden" name="_id" v-model="userInfo._id">
         <table class="table table-edit">
             <tr>
                 <td width="80px">手机号码</td>
@@ -8,7 +9,7 @@
                 <td width="180px"><input type="password" name="user_password" v-model="userInfo.user_password" class="form-control input-sm"></td>
             </tr>
             <tr>
-                <td width="90px">用户名</td>
+                <td>用户名</td>
                 <td><input type="text" name="user_name" v-model="userInfo.user_name" class="form-control input-sm"></td>
                 <td>steamid</td>
                 <td><input type="text" name="user_steamid" v-model="userInfo.user_steamid" class="form-control input-sm"></td>

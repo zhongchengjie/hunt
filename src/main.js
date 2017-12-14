@@ -4,9 +4,11 @@ import Vue from 'vue'
 import App from './App'
 import router from './router'
 import VModal from 'vue-js-modal'
+import VueResource from 'vue-resource'
 
 Vue.config.productionTip = false
 Vue.use(VModal)
+Vue.use(VueResource);
 
 window.eventBus = new Vue();
 

@@ -6,6 +6,12 @@
         <span class="page">用户管理</span>
       </a>
     </router-link>
+    <router-link tag="li" class="pageLink" to="/bot">
+      <a>
+        <i class="fa fa-desktop"></i>
+        <span class="page">机器人管理</span>
+      </a>
+    </router-link>
     <li class="treeview">
       <a>
         <i class="fa fa-table"></i>
