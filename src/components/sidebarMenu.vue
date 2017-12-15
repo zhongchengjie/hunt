@@ -12,32 +12,13 @@
         <span class="page">机器人管理</span>
       </a>
     </router-link>
-    <li class="treeview">
+   <router-link tag="li" class="pageLink" to="/dict">
       <a>
-        <i class="fa fa-table"></i>
+        <i class="fa fa-desktop"></i>
         <span class="page">数据字典管理</span>
-        <span class="pull-right-container">
-          <i class="fa fa-angle-left fa-fw pull-right"></i>
-        </span>
       </a>
-      <ul class="treeview-menu">
-        <li>
-        	<router-link class="pageLink" to="">
-	          <a href="#">
-	            <i class="fa fa-file-word-o"></i> 饰品稀有度
-	          </a>
-	        </router-link>
-        </li>
-        <li>
-        	<router-link  class="pageLink" to="">
-	          <a href="#">
-	            <i class="fa fa-file-picture-o"></i> 饰品类型
-	          </a>
-	        </router-link>
-        </li>
-      </ul>
-    </li>
-    <router-link tag="li" class="pageLink" to="">
+   </router-link>
+    <router-link tag="li" class="pageLink" to="/hero">
       <a>
         <i class="fa fa-tasks"></i>
         <span class="page">英雄资料管理</span>

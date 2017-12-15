@@ -39,7 +39,7 @@
 		      </table>
   		  </div><!--end of ibox-content-->
   	</div>
-  	<modal name="botEditModal"  :width="480" :height="260" :pivotY="0.3" :pivotX="0.6">
+  	<modal :name="modalName"  :width="480" :height="260" :pivotY="0.3" :pivotX="0.6">
 	      <modal-header modal-title="添加机器人" :modal-name="modalName"></modal-header>
 	      <div class="modal-body">
            <bot-edit :bot-info="botInfo"></bot-edit>

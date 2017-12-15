@@ -44,7 +44,7 @@
 		      </table>
   		  </div><!--end of ibox-content-->
   	</div>
-  	<modal name="userEditModal"  :width="480" :height="260" :pivotY="0.3" :pivotX="0.6">
+  	<modal :name="modalName"  :width="480" :height="260" :pivotY="0.3" :pivotX="0.6">
 	      <modal-header modal-title="添加用户" :modal-name="modalName"></modal-header>
 	      <div class="modal-body">
            <user-edit :user-info="userInfo"></user-edit>
@@ -141,7 +141,9 @@ export default {
         
     },
     addUser:function(){
-        this.$http.post(this.addApi,{userInfo:this.userInfo}).then(response => {
+        var userInfo = this.userInfo;
+        delete userInfo._id;
+        this.$http.post(this.addApi,{userInfo:userInfo}).then(response => {
         	  var result = response.data;
         	  if(result.status=="succ"){
         	  	  layer.msg("添加成功!",{icon:1});

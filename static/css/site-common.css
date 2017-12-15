@@ -1,5 +1,9 @@
 .form-contorl{
-	border-radius: 2px;
+	border-radius: 3px;
+}
+
+.input-group-addon{
+	background-color:#f5f5f5
 }
 
 .content-header{
