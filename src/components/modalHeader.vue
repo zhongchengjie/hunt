@@ -1,7 +1,7 @@
 <template>
 	<div class="modal-header">
 		<span class="pull-right" @click="closeModal"><i class="fa fa-close"></i></span>
-    <h5>{{modalTitle}}</h5>
+        <h5>{{modalTitle}}</h5>
 	</div>
 </template>
 
@@ -18,8 +18,8 @@ export default {
 	  methods:{
 	      //关闭模态框
 	      closeModal:function(){
-          var modalName = this.modalName;
-          this.$modal.hide(modalName);
+	          var modalName = this.modalName;
+	          this.$modal.hide(modalName);
         }
 	  }
 }

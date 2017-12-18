@@ -1,8 +1,8 @@
-.form-contorl{
+.form-control{
 	border-radius: 3px;
 }
 
-.input-group-addon{
+.input-group .input-group-addon{
 	background-color:#f5f5f5
 }
 
@@ -38,8 +38,12 @@
     border-width: 1px 0;
 }
 
-.ibox .ibox-content-search{
+.ibox .ibox-content-search {
 	margin-bottom: 20px
+}
+
+.ibox-content-page .total-info, .ibox-content-page .page-no{
+	color:#777
 }
 
 .v--modal-box .modal-body{padding:15px 15px 0}
@@ -48,6 +52,7 @@
     color: #777;
     font-size: 13px;
 }
+
 .table-edit tr td{
    padding:6px;
 
@@ -55,4 +60,9 @@
 
 .table-edit tr td:nth-child(odd){
    text-align: right;
+}
+
+.noData{
+	text-align:center;
+	color:#999
 }
