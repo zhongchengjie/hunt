@@ -10,7 +10,7 @@
   		  	 	    	  <button type="button" class="btn btn-primary btn-sm" @click="showModal(1)">添加英雄资料</button>
   		  	 	    </div>
   		  	 	    <div class="col-sm-9">
-  		  	 	    	  
+
   		  	 	    </div>
   		  	 </div>
   		  	 <table class="table table-auto table-striped table-hover">
@@ -20,24 +20,28 @@
 		                <th>英文名</th>
 		                <th>简称</th>
 		                <th>类型</th>
-		                <th>图片路径</th>
+		                <th>英雄图片</th>
 		                <th>排序</th>
 		                <th>操作</th>
 		             </tr>
 		          </thead>
-		          <tbody>
+		          <tbody v-if="heroList.length>0">
 		             <tr v-for="hero in heroList">
 		                <td>{{hero.hero_cn_name}}</td>
 		                <td>{{hero.hero_en_name}}</td>
 		                <td>{{hero.hero_short_name}}</td>
 		                <td v-html="getHeroType(hero.hero_type)"></td>
-		                <td>{{hero.hero_img}}</td>
+		                <td><img :src="'/static/img/hero/'+hero.hero_img"></td>
 		                <td>{{hero.order}}</td>
 		                <td><a href="javascript:void(0)" @click="showModal(2,hero._id)">编辑</a> - <a href="javascript:void(0)">删除</a></td>
 		             </tr>
 		          </tbody>
+              <tbody v-else>
+                 <tr><td colspan="7" class="noData">暂无数据！</td></tr>
+              </tbody>
 		      </table>
-  		  </div><!--end of ibox-content-->
+          <paginat v-if="heroList.length>0" :total-count="totalCount" :p-size="searchCon.pageSize"></paginat>
+        </div><!--end of ibox-content-->
   	</div>
   	<modal :name="modalName"  :width="500" :height="260" :pivotY="0.3" :pivotX="0.6">
 	      <modal-header :modal-title="modalTitle" :modal-name="modalName"></modal-header>
@@ -55,13 +59,15 @@
 import modalHeader from '../../components/modalHeader.vue'
 import modalFooter from '../../components/modalFooter.vue'
 import heroEdit from './heroEdit.vue'
+import paginat from '../../components/paginat.vue'
 
 export default {
   name: 'user',
   components:{
   	  "modal-header": modalHeader,
       "modal-footer": modalFooter,
-      "hero-edit": heroEdit
+      "hero-edit": heroEdit,
+      "paginat" : paginat
   },
   data:function(){
       return{
@@ -77,21 +83,30 @@ export default {
              hero_type:"",
              order:""
         },
+        totalCount:0,
+        searchCon:{pageSize:15,pageNo:1},
         queryApi:"http://localhost:8809/api/hero/get",
         addApi:"http://localhost:8809/api/hero/add",
         editApi:"http://localhost:8809/api/hero/update"
       }
   },
   mounted:function(){
-  	  this.getHeroList();  
-      eventBus.$on("saveClick", this.formAjaxSubmit)
+      var _this = this;
+      _this.getHeroList();
+      eventBus.$on("saveClick", _this.formAjaxSubmit);
+      eventBus.$on("reloadList",function(pageSize,pageNo){
+        _this.searchCon.pageSize = parseInt(pageSize);
+        _this.searchCon.pageNo = parseInt(pageNo);
+        _this.getHeroList();
+      })
   },
   methods:{
   	getHeroList:function(){
-  		  this.$http.get(this.queryApi).then(response => {
+  		  this.$http.post(this.queryApi,{searchCon:this.searchCon}).then(response => {
         	  var result = response.data
         	  if(result.status=="succ"){
-        	  	   this.heroList = result.result1;
+        	  	   this.heroList = result.result;
+        	  	   this.totalCount = result.totalCount;
         	  }else{
         	  	   layer.msg(result.msg,{icon:7});
         	  }
@@ -101,11 +116,11 @@ export default {
   	},
   	getHeroType:function(type){
 	  		if(type=="1"){
-	  			 return "<label class='label label-danger'>力量英雄</label>";
+	  			 return "<span class='label label-danger'>力量英雄</span>";
 	  		}else if(type=="2"){
-	  			 return "<label class='label label-success'>敏捷英雄</label>";
+	  			 return "<span class='label label-success'>敏捷英雄</span>";
 	  		}else if(type=="3"){
-	  			 return "<label class='label label-info'>智力英雄</label>";
+	  			 return "<span class='label label-info'>智力英雄</span>";
 	  		}
   	},
   	showModal:function(type,id){
@@ -131,7 +146,7 @@ export default {
     	  else{
     	  	  this.addHero();
     	  }
-        
+
     },
     addHero:function(){
     	  var heroInfo = this.heroInfo;
@@ -140,11 +155,11 @@ export default {
         	  var result = response.data;
         	  if(result.status=="succ"){
         	  	  layer.msg("添加成功!",{icon:1});
-        	  	  this.$modal.hide(this.modalName);     
+        	  	  this.$modal.hide(this.modalName);
         	  	  this.getHeroList();
         	  }else{
         	  	   layer.msg(result.msg,{icon:7});
-        	  }			    
+        	  }
 			  }, response => {
 			      layer.msg("请求出错了！",{icon:7});
 			  });
@@ -154,11 +169,11 @@ export default {
         	  var result = response.data;
         	  if(result.status=="succ"){
         	  	  layer.msg("修改成功",{icon:1});
-        	  	  this.$modal.hide(this.modalName);     
+        	  	  this.$modal.hide(this.modalName);
         	  	  this.getHeroList();
         	  }else{
         	  	   layer.msg(result.msg,{icon:7});
-        	  }			    
+        	  }
 			  }, response => {
 			      layer.msg("请求出错了！",{icon:7});
 			  });
@@ -167,7 +182,6 @@ export default {
 }
 </script>
 
-<style>
-
-
+<style scoped>
+   table tr td img{width:60px;height:40px}
 </style>

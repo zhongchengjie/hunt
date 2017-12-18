@@ -11,7 +11,7 @@
 	  	    <option value="50">50 条/页</option>
 	    </select>
 	    <span class="total-info">&nbsp;&nbsp;&nbsp;共  <span>{{totalCount}}</span> 条，共  <span>{{getTotalPage}}</span> 页</span>
-	    <button type="button" v-if="getTotalPage>1&&getTotalPage!=pageNo" class="btn btn-sm btn-default pull-right" @click="nextPage">下一页</button>	    
+	    <button type="button" v-if="getTotalPage>1&&getTotalPage!=pageNo" class="btn btn-sm btn-default pull-right" @click="nextPage">下一页</button>
 	    <button type="button" v-if="getTotalPage>1&&pageNo!=1" class="btn btn-sm btn-default pull-right" style="margin-right:10px" @click="prePage">上一页</button>
 	    <span class="page-no pull-right" style="margin-right:10px;margin-top:5px">第 <span>{{pageNo}}</span> 页</span>
   </div>
@@ -23,7 +23,7 @@ export default {
 	  props:["totalCount","pageSizes","pSize"],
 	  data:function(){
 	  	  return{
-	  	  	 pageSize:15,  //每页的记录数 
+	  	  	 pageSize:15,  //每页的记录数
 	  	  	 pageNo:1,    //页码
 	  	  	 totalPage:1  //总页数
 	  	  }
@@ -34,9 +34,9 @@ export default {
 	  computed:{
 	  	 getTotalPage:function(){
 	  	    var totalCount = this.totalCount;
-	     	if(totalCount>0){
-	     		return Math.ceil(totalCount/this.pageSize);
-	     	}
+          if(totalCount>0){
+            return Math.ceil(totalCount/this.pageSize);
+          }
 	  	 }
 	  },
 	  methods:{
@@ -53,7 +53,7 @@ export default {
 	     //上一页
 	     prePage:function(){
 	     	this.pageNo--;
-	     	eventBus.$emit("reloadList",this.pageSize,this.pageNo);     	
+	     	eventBus.$emit("reloadList",this.pageSize,this.pageNo);
 	     }
 	  }
 }
