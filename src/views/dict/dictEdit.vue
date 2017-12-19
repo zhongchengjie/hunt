@@ -4,7 +4,7 @@
         <table class="table table-edit">
         	<tr>
                 <td width="90px">字典项名称</td>
-                <td><input type="text" name="" v-model="dictInfo.dict_name" class="form-control input-sm" :readonly="readonly"></td>
+                <td><input type="text" name="" v-model="dictInfo.dict_name" class="form-control input-sm" readonly="readonly"></td>
             </tr>
             <tr>
                 <td>字典项code</td>
@@ -24,18 +24,8 @@
 
 <script>
 export default {
-	  name:"dictEdit",
-	  props:["dictInfo"],
-	  data:function(){
-	  	  return{
-	  	  	 readonly:false
-	  	  }
-	  },
-	  created:function(){
-	  	  if(this.dictInfo.dict_name!=""){
-	  	  	 this.readonly = true;
-	  	  }
-	  }
+	name:"dictEdit",
+	props:["dictInfo"]
 }
 </script>
 

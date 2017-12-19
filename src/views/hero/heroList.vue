@@ -10,7 +10,23 @@
   		  	 	    	  <button type="button" class="btn btn-primary btn-sm" @click="showModal(1)">添加英雄资料</button>
   		  	 	    </div>
   		  	 	    <div class="col-sm-9">
-
+                    <form class="form-inline">
+		  		  	 	    	  <div class="input-group pull-right" style="width:260px">
+		  		  	 	    	  	  <input v-model="searchCon.inputText" type="text" placeholder="请输入英雄的中英文名称或简称" class="input-sm form-control">
+		  		  	 	    	  	  <span class="input-group-btn">
+		                            <button type="button" class="btn btn-sm btn-primary" @click="getHeroList"> 搜索</button>
+		  		  	 	    	  	  </span>
+		  		  	 	    	  </div>
+		  		  	 	    	  <div class="input-group input-group-sm pull-right" style="margin-right:10px">
+												      <span class="input-group-addon">英雄类型</span>	
+													    <select v-model="searchCon.heroType" class="form-control input-sm" @change="getHeroList">
+													    	  <option value="" selected="selected">--全部--</option>
+				  		  	 	    	  	    <option value="1">力量英雄</option>
+				  		  	 	    	  	    <option value="2">敏捷英雄</option>
+				  		  	 	    	  	    <option value="3">智力英雄</option>
+				  		  	 	    	    </select>
+											  </div>
+										</form>
   		  	 	    </div>
   		  	 </div>
   		  	 <table class="table table-auto table-striped table-hover">
@@ -19,7 +35,7 @@
 		                <th>英雄名</th>
 		                <th>英文名</th>
 		                <th>简称</th>
-		                <th>类型</th>
+		                <th>英雄类型</th>
 		                <th>英雄图片</th>
 		                <th>排序</th>
 		                <th>操作</th>
@@ -43,12 +59,19 @@
           <paginat v-if="heroList.length>0" :total-count="totalCount" :p-size="searchCon.pageSize"></paginat>
         </div><!--end of ibox-content-->
   	</div>
-  	<modal :name="modalName"  :width="500" :height="260" :pivotY="0.3" :pivotX="0.6">
-	      <modal-header :modal-title="modalTitle" :modal-name="modalName"></modal-header>
+  	<modal :name="addModal"  :width="500" :height="460" :pivotY="0.3" :pivotX="0.6">
+	      <modal-header modal-title="添加英雄资料" :modal-name="addModal"></modal-header>
+	      <div class="modal-body">
+           <hero-add :hero-info="heroInfo"></hero-add>
+        </div>
+	      <modal-footer :modal-name="addModal"></modal-footer>
+	  </modal>
+	  <modal :name="editModal"  :width="500" :height="260" :pivotY="0.3" :pivotX="0.6">
+	      <modal-header modal-title="编辑英雄资料" :modal-name="editModal"></modal-header>
 	      <div class="modal-body">
            <hero-edit :hero-info="heroInfo"></hero-edit>
         </div>
-	      <modal-footer :modal-name="modalName"></modal-footer>
+	      <modal-footer :modal-name="editModal"></modal-footer>
 	  </modal>
   </section>
 
@@ -58,6 +81,7 @@
 
 import modalHeader from '../../components/modalHeader.vue'
 import modalFooter from '../../components/modalFooter.vue'
+import heroAdd from './heroAdd.vue'
 import heroEdit from './heroEdit.vue'
 import paginat from '../../components/paginat.vue'
 
@@ -66,13 +90,14 @@ export default {
   components:{
   	  "modal-header": modalHeader,
       "modal-footer": modalFooter,
+      "hero-add": heroAdd,
       "hero-edit": heroEdit,
       "paginat" : paginat
   },
   data:function(){
       return{
-      	modalName:"botEditModal",
-      	modalTitle:"添加英雄资料",
+      	addModal:"botAddModal",
+      	editModal:"botEditModal",
         heroList:[],
         heroInfo:{
         	   _id:"",
@@ -84,9 +109,9 @@ export default {
              order:""
         },
         totalCount:0,
-        searchCon:{pageSize:15,pageNo:1},
+        searchCon:{heroType:"",inputText:"",pageSize:10,pageNo:1},
         queryApi:"http://localhost:8809/api/hero/get",
-        addApi:"http://localhost:8809/api/hero/add",
+        addApi:"http://localhost:8809/api/hero/addBatch",
         editApi:"http://localhost:8809/api/hero/update"
       }
   },
@@ -95,9 +120,9 @@ export default {
       _this.getHeroList();
       eventBus.$on("saveClick", _this.formAjaxSubmit);
       eventBus.$on("reloadList",function(pageSize,pageNo){
-        _this.searchCon.pageSize = parseInt(pageSize);
-        _this.searchCon.pageNo = parseInt(pageNo);
-        _this.getHeroList();
+         _this.searchCon.pageSize = parseInt(pageSize);
+         _this.searchCon.pageNo = parseInt(pageNo);
+         _this.getHeroList();
       })
   },
   methods:{
@@ -125,10 +150,9 @@ export default {
   	},
   	showModal:function(type,id){
   		  if(type==1){
-  		  	 this.modalTitle = "添加英雄资料";
   		  	 this.heroInfo = { _id:"",hero_en_name: "",hero_cn_name:"",hero_short_name: "",hero_img:"",hero_type:"",order:""};
+  		  	 this.$modal.show(this.addModal);
   		  }else{
-  		  	 this.modalTitle = "修改英雄资料";
   		  	 var list = this.heroList;
   		  	 var len = list.length;
   		  	 for(var i=0;i<len;i++){
@@ -136,8 +160,9 @@ export default {
   		  	 	   	  this.heroInfo = list[i]
   		  	 	   }
   		  	 }
+  		  	 this.$modal.show(this.editModal);
   		  }
-  		  this.$modal.show(this.modalName);
+  		  
   	},
     formAjaxSubmit:function(){
     	  if(this.heroInfo._id!=""&&this.heroInfo._id!=null){
@@ -150,12 +175,14 @@ export default {
     },
     addHero:function(){
     	  var heroInfo = this.heroInfo;
-    	  delete heroInfo._id        //添加是不需要_id属性
+    	  heroInfo.hero_cn_name = heroInfo.hero_cn_name.replace(/[\r\n]/g,",");
+    	  heroInfo.hero_en_name = heroInfo.hero_en_name.replace(/[\r\n]/g,",");
+    	  heroInfo.hero_img = heroInfo.hero_img.replace(/[\r\n]/g,",");
         this.$http.post(this.addApi,{heroInfo:heroInfo}).then(response => {
         	  var result = response.data;
         	  if(result.status=="succ"){
         	  	  layer.msg("添加成功!",{icon:1});
-        	  	  this.$modal.hide(this.modalName);
+        	  	  this.$modal.hide(this.addModal);
         	  	  this.getHeroList();
         	  }else{
         	  	   layer.msg(result.msg,{icon:7});
@@ -169,7 +196,7 @@ export default {
         	  var result = response.data;
         	  if(result.status=="succ"){
         	  	  layer.msg("修改成功",{icon:1});
-        	  	  this.$modal.hide(this.modalName);
+        	  	  this.$modal.hide(this.editModal);
         	  	  this.getHeroList();
         	  }else{
         	  	   layer.msg(result.msg,{icon:7});
@@ -183,5 +210,5 @@ export default {
 </script>
 
 <style scoped>
-   table tr td img{width:60px;height:40px}
+   table tr td img{width:60px;height:36px}
 </style>

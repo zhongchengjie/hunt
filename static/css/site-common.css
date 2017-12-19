@@ -6,6 +6,15 @@
 	background-color:#f5f5f5
 }
 
+.noData{
+	text-align:center;
+	color:#999
+}
+
+.label{
+	padding:.3em .6em
+}
+
 .content-header{
     min-height: 42px;
 }
@@ -60,9 +69,4 @@
 
 .table-edit tr td:nth-child(odd){
    text-align: right;
-}
-
-.noData{
-	text-align:center;
-	color:#999
 }

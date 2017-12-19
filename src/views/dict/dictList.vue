@@ -7,12 +7,11 @@
   		  <div class="ibox-content">
   		  	 <div class="ibox-content-search row">
   		  	 	    <div class="col-sm-3">
-  		  	 	    	  <button type="button" class="btn btn-primary btn-sm" @click="showModal(1)">新增字典项</button>
-  		  	 	    	  <button type="button" class="btn btn-primary btn-sm" @click="showModal(3)" style="margin-left:10px">添加子项</button>
+  		  	 	    	  <button type="button" class="btn btn-primary btn-sm" @click="showModal(1)">添加字典项</button>
   		  	 	    </div>
   		  	 	    <div class="col-sm-9">
   		  	 	    	 <form class="form-inline">
-			  		  	 	     <div class="input-group input-group-sm">
+			  		  	 	     <div class="input-group input-group-sm pull-right">
 											      <span class="input-group-addon">字典项名称</span>	
 												    <select v-model="dict_name" class="form-control input-sm" @change="getDictList">
 			  		  	 	    	  	  <option value="accessories_rarity" selected="selected">饰品稀有度</option>
@@ -39,9 +38,9 @@
 		                <td>{{index+1}}</td>
 		                <td>{{dict.dict_code}}</td>
 		                <td>{{dict.dict_value}}</td>
-		                <td>{{index+1}}</td>
+		                <td>{{dict.order}}</td>
 		                <td v-html="getInuse(dict.in_use)"></td>
-		                <td>{{dict.create_time}}</td>
+		                <td>{{timeFormat(dict.create_time)}}</td>
 		                <td><a href="javascript:void(0)" @click="showModal(2,dict._id)">编辑</a> - <a href="javascript:void(0)">删除</a></td>
 		             </tr>
 		          </tbody>
@@ -49,7 +48,7 @@
   		  </div><!--end of ibox-content-->
   	</div>
   	<modal :name="modalName"  :width="320" :height="290" :pivotY="0.3" :pivotX="0.6">
-	      <modal-header modal-title="添加数据字典" :modal-name="modalName"></modal-header>
+	      <modal-header :modal-title="modalTitle" :modal-name="modalName"></modal-header>
 	      <div class="modal-body">
            <dict-edit :dict-info="dictInfo"></dict-edit>
         </div>
@@ -64,6 +63,7 @@
 import modalHeader from '../../components/modalHeader.vue'
 import modalFooter from '../../components/modalFooter.vue'
 import dictEdit from './dictEdit.vue'
+import moment from  'moment'
 
 export default {
   name: 'dict',
@@ -75,6 +75,7 @@ export default {
   data:function(){
       return{
       	modalName:"dictEditModal",
+      	modalTitle:"添加字典项",
       	dict_name:"accessories_rarity",
         dictList:[],
         dictInfo:{
@@ -113,23 +114,25 @@ export default {
 	  			 return "<label class='label label-warning'>已注销</label>";
 	  		}
   	},
-
+    timeFormat:function(datetime){
+  		  if(datetime){
+  		  	 return moment(datetime).format('YYYY-MM-DD HH:mm:ss');
+  		  }		  
+  	},
   	showModal:function(type,id){
   		  if(type==1){
-  		  	 this.dictInfo = {_id:"",dict_name: "",dict_code:"",dict_value: "",order:""};
+  		  	 this.modalTitle = "添加字典项";
+  		  	 this.dictInfo = {_id:"",dict_name: this.dict_name,dict_code:"",dict_value: "",order:""};
   		  }else{
+  		  	 this.modalTitle = "编辑字典项";
   		  	 var list = this.dictList;
   		  	 var len = list.length;
-  		  	 if(type==3){
-  		  	 	    this.dictInfo = {_id:"",dict_name: this.dict_name,dict_code:"",dict_value: "",order:len+1};
-  		  	 }
-  		  	 else{
-	  		  	 	for(var i=0;i<len;i++){
-	  		  	 	   if(list[i]._id ==id){
-	  		  	 	   	  this.dictInfo = list[i]
-	  		  	 	   }
-	  		  	  }
-  		  	 }
+		  	 	 for(var i=0;i<len;i++){
+		  	 	   if(list[i]._id ==id){
+		  	 	   	  this.dictInfo = list[i]
+		  	 	   }
+		  	   }
+  		  	
   		  }
   		  this.$modal.show(this.modalName);
   	},
@@ -171,29 +174,6 @@ export default {
 			  }, response => {
 			      layer.msg("请求出错了！",{icon:7});
 			  });
-    },
-    botLogin:function(id,port,account_name,login_pwd){
-    	  var _this = this;
-    	  layer.prompt({title: '请输入手机动态验证码', formType: 1}, function(code, index){
-    	  	   if(code==""){
-    	  	   	   layer.msg("请输入手机动态验证码！",{icon:7});
-    	  	   	   return;
-    	  	   }
-				     layer.close(index);
-				     var dictInfo ={_id:id,port:port,account_name:account_name,login_pwd:login_pwd,two_factor_code:code}
-				     _this.$http.post(_this.loginApi,{dictInfo:dictInfo}).then(response => {
-		        	  var result = response.data;
-		        	  if(result.status=="succ"){
-		        	  	  layer.msg("登录成功",{icon:1});  
-		        	  	  _this.getDictList();
-		        	  }else{
-		        	  	   layer.msg(result.msg,{icon:7});
-		        	  }			    
-					   }, response => {
-					      layer.msg("请求出错了！",{icon:7});
-					   });
-				     
-				});
     }
   }
 }

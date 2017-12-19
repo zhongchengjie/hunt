@@ -200,8 +200,8 @@ export default {
 				     _this.$http.post(_this.loginApi,{botInfo:botInfo}).then(response => {
 		        	  var result = response.data;
 		        	  if(result.status=="succ"){
-		        	  	  layer.msg("登录成功",{icon:1});  
-		        	  	  _this.getBotList();
+		        	  	   layer.msg("登录成功",{icon:1});  
+		        	  	   _this.getBotList();
 		        	  }else{
 		        	  	   layer.msg(result.msg,{icon:7});
 		        	  }			    

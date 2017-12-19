@@ -8,9 +8,45 @@ import VueResource from 'vue-resource'
 
 Vue.config.productionTip = false
 Vue.use(VModal)
-Vue.use(VueResource);
 
 window.eventBus = new Vue();
+
+
+// Some middleware to help us ensure the user is authenticated.
+router.beforeEach((to, from, next) => {
+  //console.log(to.path);
+  if (to.path!="/login"&&(!localStorage.getItem("token")||localStorage.getItem("token")=="")) {
+    // this route requires auth, check if logged in
+    // if not, redirect to login page.
+    console.log('Not authenticated')
+    next({
+       path: '/login'
+    })
+  } else {
+    next()
+  }
+})
+
+Vue.use(VueResource);
+Vue.http.interceptors.push((request, next) => {
+ /* const auth = store.state.account.auth;
+  if (auth.check()) {
+    const accessToken = auth.jwt_token.access_token;
+    Vue.http.headers.common.Authorization = `Bearer ${accessToken}`;
+  } else {
+    delete Vue.http.headers.common.Authorization;
+  }*/
+  console.log(request);
+  if(request.url=="http://localhost:8809/api/login"){
+  	  delete Vue.http.headers.common.Authorization;
+  }else{
+  	  const accessToken = localStorage.getItem("token");
+       Vue.http.headers.common.Authorization = `Bearer ${accessToken}`;
+  }
+
+  // continue to next interceptor
+  next();
+});
 
 /* eslint-disable no-new */
 new Vue({
