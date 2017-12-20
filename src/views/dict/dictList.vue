@@ -85,7 +85,7 @@ export default {
              dict_value: "",
              order:""
         },
-        queryApi:"http://localhost:8809/api/dataDict/get?name=",
+        queryApi:"http://localhost:8809/api/dataDict/get",
         addApi:"http://localhost:8809/api/dataDict/add",
         editApi:"http://localhost:8809/api/dataDict/update",
       }
@@ -96,7 +96,7 @@ export default {
   },
   methods:{
   	getDictList:function(){
-  		  this.$http.get(this.queryApi+this.dict_name).then(response => {
+  		  this.$http.post(this.queryApi,{dict_name:this.dict_name}).then(response => {
         	  var result = response.data
         	  if(result.status=="succ"){
         	  	   this.dictList = result.result;

@@ -110,7 +110,7 @@ export default {
         },
         totalCount:0,
         searchCon:{heroType:"",inputText:"",pageSize:10,pageNo:1},
-        queryApi:"http://localhost:8809/api/hero/get",
+        queryApi:"http://localhost:8809/api/hero/getAll",
         addApi:"http://localhost:8809/api/hero/addBatch",
         editApi:"http://localhost:8809/api/hero/update"
       }
