@@ -2,7 +2,7 @@
   <section class="content">
   	<div class="ibox">
   		  <div class="ibox-title">
-  		  	  <h5>机器人管理</h5>
+  		  	  <h5>机器人帐号管理</h5>
   		  </div><!--end of ibox-title-->
   		  <div class="ibox-content">
   		  	 <div class="ibox-content-search row">
@@ -18,11 +18,19 @@
 		  		  	 	    	  	  </span>
 		  		  	 	    	  </div>
 		  		  	 	    	  <div class="input-group input-group-sm pull-right" style="margin-right:10px">
-												      <span class="input-group-addon">状态</span>	
-													    <select v-model="searchCon.botStatus" class="form-control input-sm" @change="getBotList">
+												      <span class="input-group-addon">登录状态</span>	
+													    <select v-model="searchCon.loginState" class="form-control input-sm" @change="getBotList">
 													    	  <option value="" selected="selected">--全部--</option>
 				  		  	 	    	  	    <option value="1">在线</option>
 				  		  	 	    	  	    <option value="-1">离线</option>
+				  		  	 	    	    </select>
+											  </div>
+											  <div class="input-group input-group-sm pull-right" style="margin-right:10px">
+												      <span class="input-group-addon">交易状态</span>	
+													    <select v-model="searchCon.loginState" class="form-control input-sm" @change="getBotList">
+													    	  <option value="" selected="selected">--全部--</option>
+				  		  	 	    	  	    <option value="1">空闲中</option>
+				  		  	 	    	  	    <option value="2">交易中</option>
 				  		  	 	    	    </select>
 											  </div>
 										</form>
@@ -34,8 +42,8 @@
 		                <th>机器人名称</th>
 		                <th>登录帐号</th>
 		                <th>端口</th>
-		                <th>是否在使用</th>
-		                <th>状态</th>
+		                <th>登录状态</th>
+		                <th>交易状态</th>
 		                <th>最近登录时间</th>
 		                <th>操作</th>
 		             </tr>
@@ -45,10 +53,10 @@
 		                <td>{{bot.bot_name}}</td>
 		                <td>{{bot.account_name}}</td>
 		                <td>{{bot.port}}</td>
-		                <td v-html="getInuse(bot.in_use)"></td>
-		                <td v-html="getBotStatus(bot.status)"></td>
+		                <td v-html="getLoginState(bot.login_state)"></td>
+		                <td v-html="getTradeState(bot.trade_state)"></td>             
 		                <td>{{bot.last_login_time}}</td>
-		                <td><a href="javascript:void(0)" @click="showModal(2,bot._id)">编辑</a> - <a  v-if="bot.status=='-1'" href="javascript:void(0)" @click="botLogin(bot._id,bot.port,bot.account_name,bot.login_pwd)">登录</a>  <a  v-if="bot.status=='1'" href="javascript:void(0)" >退出</a></td>
+		                <td><a href="javascript:void(0)" @click="showModal(2,bot._id)">编辑</a> - <a  v-if="bot.login_state=='-1'" href="javascript:void(0)" @click="botLogin(bot._id,bot.port,bot.account_name,bot.login_pwd)">登录</a>  <a  v-if="bot.login_state=='1'" href="javascript:void(0)" @click="botLogout(bot._id)">退出</a></td>
 		             </tr>
 		          </tbody>
 		          <tbody v-else>
@@ -95,11 +103,12 @@ export default {
              port:"",
              phone:""
         },
-        searchCon:{botStatus:"",inputText:"",pageSize:15,pageNo:1},
+        searchCon:{loginState:"",inputText:"",pageSize:15,pageNo:1},
         queryApi:"http://localhost:8809/api/bot/get",
         addApi:"http://localhost:8809/api/bot/add",
         editApi:"http://localhost:8809/api/bot/update",
-        loginApi:"http://localhost:8809/api/bot/login"
+        loginApi:"http://localhost:8809/api/bot/login",
+        logoutApi:"http://localhost:8809/api/bot/logout"
       }
   },
   mounted:function(){
@@ -119,17 +128,15 @@ export default {
 			       layer.msg("请求出错了！",{icon:7});
 			  });
   	},
-  	getInuse:function(in_use){
-	  		if(in_use=="1"){
-	  			 return "<label class='label label-success'>使用中</label>";
-	  		}else if(in_use=="0"){
-	  			 return "<label class='label label-warning'>已注销</label>";
+  	getTradeState:function(state){
+	  		if(state=="1"){
+	  			 return "<label class='label label-success'>空闲中</label>";
 	  		}
   	},
-  	getBotStatus:function(status){
-	  		if(status=="1"){
+  	getLoginState:function(state){
+	  		if(state=="1"){
 	  			 return "<label class='label label-success'>在线</label>";
-	  		}else if(status=="-1"){
+	  		}else if(state=="-1"){
 	  			 return "<label class='label label-warning'>离线</label>";
 	  		}
   	},
@@ -210,6 +217,18 @@ export default {
 					   });
 				     
 				});
+    },
+    botLogout:function(id){
+    	  this.$http.post(this.logoutApi,{bot_id:id}).then(response => {
+        	  var result = response.data;
+        	  if(result.status=="succ"){  
+        	  	  this.getBotList();
+        	  }else{
+        	  	   layer.msg(result.msg,{icon:7});
+        	  }			    
+			  }, response => {
+			      layer.msg("请求出错了！",{icon:7});
+			  });
     }
   }
 }

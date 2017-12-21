@@ -6,12 +6,6 @@
         <span class="page">用户管理</span>
       </a>
     </router-link>
-    <router-link tag="li" class="pageLink" to="/bot">
-      <a>
-        <i class="fa fa-desktop"></i>
-        <span class="page">机器人管理</span>
-      </a>
-    </router-link>
    <router-link tag="li" class="pageLink" to="/dict">
       <a>
         <i class="fa fa-desktop"></i>
@@ -24,12 +18,35 @@
         <span class="page">英雄资料管理</span>
       </a>
     </router-link>
-    <router-link tag="li" class="pageLink" to="">
-      <a>
-        <i class="fa fa-cog"></i>
-        <span class="page">交易管理</span>
+    <li class="treeview">
+      <a href="#">
+        <i class="fa fa-folder-o"></i>
+        <span>交易管理</span>
+        <span class="pull-right-container">
+          <i class="fa fa-angle-left fa-fw pull-right"></i>
+        </span>
       </a>
-    </router-link>
+      <ul class="treeview-menu">
+      	<router-link tag="li" class="pageLink" to="/bot/account">
+		      <a>
+		        <i class="fa fa-tasks"></i>
+		        <span class="page">机器人帐号</span>
+		      </a>
+		    </router-link>
+        <router-link tag="li" class="pageLink" to="/bot/store">
+		      <a>
+		        <i class="fa fa-desktop"></i>
+		        <span class="page">机器人库存</span>
+		      </a>
+		    </router-link>
+		    <router-link tag="li" class="pageLink" to="/assset">
+		      <a>
+		        <i class="fa fa-tasks"></i>
+		        <span class="page">饰品信息</span>
+		      </a>
+		    </router-link>
+      </ul>
+    </li>
     <li class="treeview">
       <a href="#">
         <i class="fa fa-folder-o"></i>
