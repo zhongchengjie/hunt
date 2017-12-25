@@ -6,7 +6,7 @@
                 <td width="80px">手机号码</td>
                 <td width="180px"><input type="tel" name="user_phone" v-model="userInfo.user_phone" class="form-control input-sm"></td>
                 <td width="80px">登录密码</td>
-                <td width="180px"><input type="password" name="user_password" v-model="userInfo.user_password" class="form-control input-sm"></td>
+                <td width="180px"><input type="password" name="user_password" v-model="userInfo.user_password" class="form-control input-sm" :readonly="ifreadonly"></td>
             </tr>
             <tr>
                 <td>用户名</td>
@@ -32,7 +32,18 @@
 <script>
 export default {
 	  name:"userEdit",
-	  props:["userInfo"]
+	  props:["userInfo"],
+	  data:function(){
+	  	return {
+	  		 ifreadonly:false
+	  	}
+	  },
+	  created:function(){
+	  	 console.log(this.userInfo.user_password);
+	  	 if(this.userInfo.user_password!=""){
+	  	 	this.ifreadonly=true;
+	  	 }
+	  }
 }
 </script>
 

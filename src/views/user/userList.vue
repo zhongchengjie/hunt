@@ -171,6 +171,7 @@ export default {
     addUser:function(){
         var userInfo = this.userInfo;
         delete userInfo._id;
+        userInfo.user_password = hex_md5(userInfo.user_password)    //md5加密
         this.$http.post(this.addApi,{userInfo:userInfo}).then(response => {
         	  var result = response.data;
         	  if(result.status=="succ"){
