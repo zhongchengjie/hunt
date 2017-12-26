@@ -5,18 +5,26 @@ import App from './App'
 import router from './router'
 import VModal from 'vue-js-modal'
 import VueResource from 'vue-resource'
-import store from './store'
+import store from './store/store'
 
 Vue.config.productionTip = false
+
+//vue-js-modal
 Vue.use(VModal)
 
+//eventBus
 window.eventBus = new Vue();
 
+//vuex
+window.store = store;
+
+//vue-resource
+Vue.use(VueResource);
 
 // Some middleware to help us ensure the user is authenticated.
 router.beforeEach((to, from, next) => {
   //console.log(to.path);
-  if (to.path!="/login"&&(!store.state.token || store.state.token === 'null')) {
+  if (to.path!="/login"&&(!localStorage.getItem("token") || localStorage.getItem("token") == '')) {
     // this route requires auth, check if logged in
     // if not, redirect to login page.
     console.log('Not authenticated')
@@ -28,7 +36,7 @@ router.beforeEach((to, from, next) => {
   }
 })
 
-Vue.use(VueResource);
+
 Vue.http.interceptors.push((request, next) => {
  /* const auth = store.state.account.auth;
   if (auth.check()) {
@@ -37,11 +45,11 @@ Vue.http.interceptors.push((request, next) => {
   } else {
     delete Vue.http.headers.common.Authorization;
   }*/
-  console.log(request);
+  //console.log(request);
   if(request.url=="http://localhost:8809/api/login"){
   	  delete Vue.http.headers.common.Authorization;
   }else{
-  	  const accessToken = router.app.$store.state.token;
+  	  const accessToken = localStorage.getItem("token");
        Vue.http.headers.common.Authorization = `Bearer ${accessToken}`;
   }
 

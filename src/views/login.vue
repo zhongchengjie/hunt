@@ -33,21 +33,20 @@ export default {
   },
   methods: {
       loginCheck:function(){
-      	  this.$http.post("http://localhost:8809/api/login",{phone:this.phone,password:hex_md5(this.password)}).then(response => {
+      	  this.$http.post("http://localhost:8809/api/login",{phone:this.phone,password:this.password}).then(response => {
         	  var result = response.data;
         	  if(result.status=="succ"){
         	  	  layer.msg("登录成功",{icon:1});
-        	  	  store.commit('SET_USER', result.user)
-                  store.commit('SET_TOKEN', result.token)
-        	  	  localStorage.setItem("token", result.token);
-        	  	  this.$router.push("/")
+        	  	  store.commit('setLoginUser', result.user)
+                store.commit('setLoginToken', result.token)
+        	  	  this.$router.push("/");
         	  }else{
         	  	   layer.msg(result.msg,{icon:7});
         	  }
 			  }, response => {
 			      layer.msg("请求出错了！",{icon:7});
 			  });
-      }  
+      }
   }
 }
 </script>
