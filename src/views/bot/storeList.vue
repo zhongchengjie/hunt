@@ -12,14 +12,14 @@
   		  	 	    <div class="col-sm-9">
   		  	 	    	  <form class="form-inline">
 		  		  	 	    	  <div class="input-group pull-right" style="width:300px">
-		  		  	 	    	  	  <input  v-model="searchCon.inputText" type="text" placeholder="请输入机器人名称、登录帐号或端口" class="input-sm form-control">
+		  		  	 	    	  	  <input  v-model="searchCon.inputText" type="text" placeholder="请输入..." class="input-sm form-control">
 		  		  	 	    	  	  <span class="input-group-btn">
 		                            <button type="button" class="btn btn-sm btn-primary" @click="getStoretList"> 搜索</button>
 		  		  	 	    	  	  </span>
 		  		  	 	    	  </div>
 		  		  	 	    	  <div class="input-group input-group-sm pull-right" style="margin-right:10px">
 												      <span class="input-group-addon">饰品状态</span>	
-													    <select v-model="searchCon.botStatus" class="form-control input-sm" @change="getStoretList">
+													    <select v-model="searchCon.assetState" class="form-control input-sm" @change="getStoretList">
 													    	  <option value="" selected="selected">--全部--</option>
 				  		  	 	    	  	    <option value="1">未上架</option>
 				  		  	 	    	  	    <option value="2">上架中</option>
@@ -43,11 +43,11 @@
 		          </thead>
 		          <tbody v-if="storeList.length>0">
 		             <tr v-for="store in storeList">
-		                <td><a href="javascript:void(0)" @click="showModal">{{store.asset._id}}</a></td>
+		                <td><a href="javascript:void(0)" @click="showModal(1,store.asset)">{{store.asset._id}}</a></td>
 		                <td>{{store.asset.asset_name}}</td>
-		                <td><a href="javascript:void(0)" @click="showModal">{{store.belong_user.user_steamid}}</a></td>
+		                <td><a href="javascript:void(0)" @click="showModal(2,store.belong_user)">{{store.belong_user.user_steamid}}</a></td>
 		                <td>{{store.belong_user.user_name}}</td>
-		                <td><a href="javascript:void(0)" @click="showModal">{{store.bot.bot_steamid}}</a></td>
+		                <td><a href="javascript:void(0)" @click="showModal(3,store.bot)">{{store.bot.bot_steamid}}</a></td>
 		                <td>{{store.bot.bot_name}}</td>
 		                <td v-html="getAssetState(store.asset_state)"></td>
 		                <td>{{store.sale_price}}</td>
@@ -59,13 +59,28 @@
 		      </table>
   		  </div><!--end of ibox-content-->
   	</div>
-  	<modal :name="modalName"  :width="500" :height="260" :pivotY="0.3" :pivotX="0.6">
-	      <modal-header :modal-title="modalTitle" :modal-name="modalName"></modal-header>
+    <modal name="assetInfoModal"  :width="600" :height="640" :pivotY="0.3" :pivotX="0.6">
+	      <modal-header :modal-title="modalTitle" modal-name="assetInfoModal"></modal-header>
 	      <div class="modal-body">
-           <bot-edit :bot-info="botInfo"></bot-edit>
+	      	  <asset-info :info-obj="infoObj" ></asset-info>
         </div>
-	      <modal-footer :modal-name="modalName"></modal-footer>
+	      <modal-footer modal-name="assetInfoModal" :type="2"></modal-footer>
 	  </modal>
+	  <modal name="userInfoModal"  :width="500" :height="240" :pivotY="0.3" :pivotX="0.6">
+	      <modal-header :modal-title="modalTitle" modal-name="userInfoModal"></modal-header>
+	      <div class="modal-body">
+	      	  <user-info :info-obj="infoObj" ></user-info>
+        </div>
+	      <modal-footer modal-name="userInfoModal" :type="2"></modal-footer>
+	  </modal>
+	  <modal name="botInfoModal"  :width="500" :height="240" :pivotY="0.3" :pivotX="0.6">
+	      <modal-header :modal-title="modalTitle" modal-name="botInfoModal"></modal-header>
+	      <div class="modal-body">
+	      	   <bot-info :info-obj="infoObj" ></bot-info>
+        </div>
+	      <modal-footer modal-name="botInfoModal" :type="2"></modal-footer>
+	  </modal>
+	  
   </section>
 
 </template>
@@ -74,40 +89,32 @@
 
 import modalHeader from '../../components/modalHeader.vue'
 import modalFooter from '../../components/modalFooter.vue'
-import botEdit from './botEdit.vue'
+import botInfo from './botInfo.vue'
+import userInfo from './userInfo.vue'
+import assetInfo from './assetInfo.vue'
 
 export default {
   name: 'bot',
   components:{
   	  "modal-header": modalHeader,
       "modal-footer": modalFooter,
-      "bot-edit": botEdit
+      "bot-info": botInfo,
+      "user-info": userInfo,
+      "asset-info": assetInfo
+      
   },
   data:function(){
       return{
-      	modalName:"botEditModal",
-      	modalTitle:"添加机器人",
+      	modalName:"assetInfoModal",
+      	modalTitle:"详细信息",
         storeList:[],
-        botInfo:{
-        	   _id:"",
-             bot_name: "",
-             bot_steamid:"",
-             account_name: "",
-             login_pwd:"",
-             port:"",
-             phone:""
-        },
-        searchCon:{botStatus:"",inputText:"",pageSize:15,pageNo:1},
-        queryApi:"http://localhost:8809/api/store/getStoreInfo?type=4",
-        addApi:"http://localhost:8809/api/bot/add",
-        editApi:"http://localhost:8809/api/bot/update",
-        loginApi:"http://localhost:8809/api/bot/login",
-        logoutApi:"http://localhost:8809/api/bot/logout"
+        infoObj:{},
+        searchCon:{assetState:"",inputText:"",pageSize:15,pageNo:1},
+        queryApi:"http://localhost:8809/api/store/getStoreInfo?type=4"
       }
   },
   mounted:function(){
   	  this.getStoretList();  
-      eventBus.$on("saveClick", this.formAjaxSubmit)
   },
   methods:{
   	getStoretList:function(){
@@ -129,8 +136,18 @@ export default {
 	  			 return "<label class='label label-success'>上架中</label>";
 	  		}
   	},
-  	showModal:function(){
-  		
+  	showModal:function(type,infoObj){
+  		  this.infoObj = infoObj;
+  		  if(type==1){
+  		  	 this.modalTitle = "饰品详细信息";
+  		  	 this.$modal.show("assetInfoModal");	
+  		  }else if(type==2){
+  		  	 this.modalTitle = "用户["+ infoObj.user_steamid+"]详细信息";
+  		  	 this.$modal.show("userInfoModal");		  	 
+  		  }else if(type==3){
+  		  	 this.modalTitle = "机器人["+ infoObj.bot_steamid+"]详细信息";
+  		  	 this.$modal.show("botInfoModal");
+  		  }
   	}
   }
 }

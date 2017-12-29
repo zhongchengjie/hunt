@@ -1,5 +1,8 @@
 <template>
-	<div class="modal-footer">
+	<div class="modal-footer" v-if="type==2">
+       <button type="button" class="btn btn-default btn-sm" @click="closeModal">关闭</button>
+	</div>
+	<div class="modal-footer" v-else>
        <button type="button" class="btn btn-primary btn-sm" @click="saveClick">保存</button>&nbsp;&nbsp;&nbsp;
        <button type="button" class="btn btn-default btn-sm" @click="closeModal">关闭</button>
 	</div>
@@ -8,7 +11,7 @@
 <script>
 export default {
 	  name:"modalFooter",
-	  props:["modalName"],
+	  props:["modalName","type"],
 	  data:function(){
 	  	return{
 	  	}

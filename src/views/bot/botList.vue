@@ -55,7 +55,7 @@
 		                <td>{{bot.port}}</td>
 		                <td v-html="getLoginState(bot.login_state)"></td>
 		                <td v-html="getTradeState(bot.trade_state)"></td>             
-		                <td>{{bot.last_login_time}}</td>
+		                <td>{{timeFormat(bot.last_login_time)}}</td>
 		                <td><a href="javascript:void(0)" @click="showModal(2,bot._id)">编辑</a> - <a  v-if="bot.login_state=='-1'" href="javascript:void(0)" @click="botLogin(bot._id,bot.port,bot.account_name,bot.login_pwd)">登录</a>  <a  v-if="bot.login_state=='1'" href="javascript:void(0)" @click="botLogout(bot._id)">退出</a></td>
 		             </tr>
 		          </tbody>
@@ -81,6 +81,7 @@
 import modalHeader from '../../components/modalHeader.vue'
 import modalFooter from '../../components/modalFooter.vue'
 import botEdit from './botEdit.vue'
+import moment from  'moment'
 
 export default {
   name: 'bot',
@@ -139,6 +140,11 @@ export default {
 	  		}else if(state=="-1"){
 	  			 return "<label class='label label-warning'>离线</label>";
 	  		}
+  	},
+    timeFormat:function(datetime){
+  		  if(datetime){
+  		  	 return moment(datetime).format('YYYY-MM-DD HH:mm:ss');
+  		  }		  
   	},
   	showModal:function(type,id){
   		  if(type==1){

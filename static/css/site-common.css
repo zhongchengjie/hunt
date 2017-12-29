@@ -66,11 +66,27 @@
     font-size: 13px;
 }
 
-.table-edit tr td{
+.table-edit tr td,.table-info tr td{
    padding:6px;
-
+   height:36px;
 }
 
 .table-edit tr td:nth-child(odd){
    text-align: right;
+}
+
+.table-info tr td:nth-child(odd){
+    background-color: #f9f9f9;
+    text-align: right;
+    min-width: 100px;
+}
+
+.table-bordered{
+	border-bottom:1px solid #e6e6e6;
+	border-right:1px solid #e6e6e6
+}
+
+.table-info.table-bordered tr td{
+	border-top:1px solid #e6e6e6;
+	border-left:1px solid #e6e6e6
 }
