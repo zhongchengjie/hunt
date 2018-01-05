@@ -13,10 +13,10 @@
             <td>{{infoObj.login_pwd}}</td>
         </tr>
         <tr>
+        	<td>登录密钥</td>
+            <td>{{infoObj.shared_secret}}</td>
             <td>端口</td>
-            <td>{{infoObj.port}}</td>
-            <td>手机号码</td>
-            <td>{{infoObj.phone}}</td>
+            <td>{{infoObj.port}}</td>         
         </tr>
     </table>
 </template>

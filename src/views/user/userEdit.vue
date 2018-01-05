@@ -25,6 +25,10 @@
                    </select>
                 </td>
             </tr>
+            <tr>
+                <td>交易链接</td>
+                <td colspan="3"><input type="text" name="user_tradeurl" v-model="userInfo.user_tradeurl" class="form-control input-sm"></td>
+            </tr>
         </table>
     </form>
 </template>

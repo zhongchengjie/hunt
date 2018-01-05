@@ -35,6 +35,7 @@
 		                <th>手机号码</th>
 		                <th>邮箱</th>
 		                <th>steamid</th>
+		                <th>交易链接</th>
 		                <th>用户类型</th>
 		                <th>注册时间</th>
 		                <th>操作</th>
@@ -46,6 +47,7 @@
 		                <td>{{user.user_phone}}</td>
 		                <td>{{user.user_email}}</td>
 		                <td>{{user.user_steamid}}</td>
+		                <td>{{user.user_tradeurl}}</td>
 		                <td>{{getUserType(user.user_type)}}</td>
 		                <td>{{timeFormat(user.register_time)}}</td>
 		                <td><a href="javascript:void(0)" @click="showModal(2,user._id)">编辑</a> - <a href="javascript:void(0)">注销</a></td>
@@ -97,7 +99,8 @@ export default {
              user_name: "",
              user_steamid:"",
              user_email:"",
-             user_type:"common"
+             user_type:"common",
+             user_tradeurl:""
         },
         searchCon:{userType:"",inputText:"",pageSize:15,pageNo:1},
         totalCount:0,
@@ -145,7 +148,7 @@ export default {
   	showModal:function(type,id){
   		  if(type==1){
   		  	 this.modalTitle = "添加用户";
-  		  	 this.userInfo = {_id:"",user_phone: "",user_password:"",user_name: "",user_steamid:"",user_email:"",user_type:"common"};
+  		  	 this.userInfo = {_id:"",user_phone: "",user_password:"",user_name: "",user_steamid:"",user_email:"",user_type:"common",user_tradeurl:""};
   		  }
   		  else{
   		  	 this.modalTitle = "修改用户";
