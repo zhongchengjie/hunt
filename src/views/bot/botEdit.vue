@@ -5,7 +5,7 @@
             <tr>
                 <td width="90px">机器人名称</td>
                 <td width="170px"><input type="text" name="" v-model="botInfo.bot_name" class="form-control input-sm"></td>
-                <td width="80px">steamid</td>
+                <td width="100px">steamid</td>
                 <td width="180px"><input type="text" name="" v-model="botInfo.bot_steamid" class="form-control input-sm"></td>
             </tr>
             <tr>
@@ -13,6 +13,12 @@
                 <td><input type="text" name="" v-model="botInfo.account_name" class="form-control input-sm"></td>
                 <td>登录密码</td>
                 <td><input type="password" name="" v-model="botInfo.login_pwd" class="form-control input-sm"></td>
+            </tr>
+            <tr>
+                <td>登录密钥</td>
+                <td><input type="text" name="" v-model="botInfo.shared_secret" class="form-control input-sm"></td>
+                <td>自动确认密钥</td>
+                <td><input type="text" name="" v-model="botInfo.identity_secret" class="form-control input-sm"></td>
             </tr>
             <tr>
                 <td>端口</td>

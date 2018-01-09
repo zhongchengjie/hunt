@@ -58,16 +58,16 @@
 		                <td v-html="getLoginState(bot.login_state)"></td>
 		                <td v-html="getTradeState(bot.trade_state)"></td>             
 		                <td>{{timeFormat(bot.last_login_time)}}</td>
-		                <td><a href="javascript:void(0)" @click="showModal(2,bot._id)">编辑</a> - <a  v-if="bot.login_state=='-1'" href="javascript:void(0)" @click="botLogin(bot._id,bot.port,bot.bot_steamid,bot.account_name,bot.login_pwd,bot.shared_secret)">登录</a>  <a  v-if="bot.login_state=='1'" href="javascript:void(0)" @click="botLogout(bot._id)">退出</a></td>
+		                <td><a href="javascript:void(0)" @click="showModal(2,bot._id)">编辑</a> - <a  v-if="bot.login_state=='-1'" href="javascript:void(0)" @click="botLogin(bot._id,bot.port,bot.bot_steamid,bot.account_name,bot.login_pwd,bot.shared_secret)">登录</a>  <a  v-if="bot.login_state=='1'" href="javascript:void(0)" @click="botLogout(bot._id,bot.port)">退出</a></td>
 		             </tr>
 		          </tbody>
 		          <tbody v-else>
-		          	   <tr><td colspan="7" class="noData">暂无数据！</td></tr>
+		          	   <tr><td colspan="8" class="noData">暂无数据！</td></tr>
 		          </tbody>
 		      </table>
   		  </div><!--end of ibox-content-->
   	</div>
-  	<modal :name="modalName"  :width="500" :height="260" :pivotY="0.3" :pivotX="0.6">
+  	<modal :name="modalName"  :width="520" :height="300" :pivotY="0.3" :pivotX="0.6">
 	      <modal-header :modal-title="modalTitle" :modal-name="modalName"></modal-header>
 	      <div class="modal-body">
            <bot-edit :bot-info="botInfo"></bot-edit>
@@ -103,8 +103,10 @@ export default {
              bot_steamid:"",
              account_name: "",
              login_pwd:"",
+             identity_secret:"",
+             shared_secret:"",
              port:"",
-             shared_secret:""
+             phone:"13560472084"
         },
         searchCon:{loginState:"",inputText:"",pageSize:15,pageNo:1},
         queryApi:"http://localhost:8809/api/bot/get",
@@ -151,7 +153,7 @@ export default {
   	showModal:function(type,id){
   		  if(type==1){
   		  	 this.modalTitle = "添加机器人";
-  		  	 this.botInfo = {_id:"",bot_name: "",bot_steamid:"",account_name: "",login_pwd:"",port:"",shared_secret:""};
+  		  	 this.botInfo = {_id:"",bot_name: "",bot_steamid:"",account_name: "",login_pwd:"",shared_secret:"",identity_secret:"",port:"",phone:"13560472084"};
   		  }else{
   		  	 this.modalTitle = "编辑机器人";
   		  	 var list = this.botList;
@@ -204,8 +206,9 @@ export default {
 			  });
     },
     botLogin:function(id,port,steamId,account_name,login_pwd,shared_secret){
-	      var botInfo ={_id:id,port:port,steamId:steamId,account_name:account_name,login_pwd:login_pwd,shared_secret:shared_secret}
-	      this.$http.post(_this.loginApi,{botInfo:botInfo}).then(response => {
+    	  layer.msg('正在登录...', {icon: 16,time: 2000,offset: '100px'});
+	      var botInfo = {_id:id,port:port,steamId:steamId,account_name:account_name,login_pwd:login_pwd,shared_secret:shared_secret}
+	      this.$http.post(this.loginApi,{botInfo:botInfo}).then(response => {
 		    	  var result = response.data;
 		    	  if(result.status=="succ"){
 		    	  	   layer.msg("登录成功",{icon:1});  
@@ -217,8 +220,10 @@ export default {
 		      layer.msg("请求出错了！",{icon:7});
 		    });
     },
-    botLogout:function(id){
-    	  this.$http.post(this.logoutApi,{bot_id:id}).then(response => {
+    botLogout:function(id,port){
+    	  layer.msg('正在退出...', {icon: 16,time: 1000,offset: '100px'});
+    	  var botInfo = {bot_id:id,port:port};
+    	  this.$http.post(this.logoutApi,{botInfo:botInfo}).then(response => {
         	  var result = response.data;
         	  if(result.status=="succ"){  
         	  	  this.getBotList();
