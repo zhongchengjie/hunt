@@ -121,7 +121,7 @@ export default {
   },
   methods:{
   	getUserList:function(){
-  		  this.$http.post(this.queryApi,{searchCon:this.searchCon}).then(response => {
+  		  /*this.$http.post(this.queryApi,{searchCon:this.searchCon}).then(response => {
         	  var result = response.data
         	  if(result.status=="succ"){
         	  	   this.userList = result.result;
@@ -130,6 +130,17 @@ export default {
         	  	   layer.msg(result.msg,{icon:7});
         	  }
 			  }, response => {
+			       layer.msg("请求出错了！",{icon:7});
+			  });*/
+			  axios.post(this.queryApi,{searchCon:this.searchCon}).then(response => {
+        	  var result = response.data
+        	  if(result.status=="succ"){
+        	  	   this.userList = result.result;
+        	  	   this.totalCount = result.totalCount;
+        	  }else{
+        	  	   layer.msg(result.msg,{icon:7});
+        	  }
+			  }).catch(error => {
 			       layer.msg("请求出错了！",{icon:7});
 			  });
   	},

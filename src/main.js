@@ -3,11 +3,12 @@
 import Vue from 'vue'
 import App from './App'
 import router from './router'
+import axios from 'axios'
 import VModal from 'vue-js-modal'
-import VueResource from 'vue-resource'
 import store from './store/store'
 
 Vue.config.productionTip = false
+Vue.prototype.axios = axios
 
 //vue-js-modal
 Vue.use(VModal)
@@ -19,7 +20,6 @@ window.eventBus = new Vue();
 window.store = store;
 
 //vue-resource
-Vue.use(VueResource);
 
 // Some middleware to help us ensure the user is authenticated.
 router.beforeEach((to, from, next) => {
@@ -37,14 +37,14 @@ router.beforeEach((to, from, next) => {
 })
 
 
-Vue.http.interceptors.push((request, next) => {
+/*Vue.http.interceptors.push((request, next) => {
  /* const auth = store.state.account.auth;
   if (auth.check()) {
     const accessToken = auth.jwt_token.access_token;
     Vue.http.headers.common.Authorization = `Bearer ${accessToken}`;
   } else {
     delete Vue.http.headers.common.Authorization;
-  }*/
+  }
   //console.log(request);
   if(request.url=="http://localhost:8809/api/login"){
   	  delete Vue.http.headers.common.Authorization;
@@ -56,7 +56,7 @@ Vue.http.interceptors.push((request, next) => {
   // continue to next interceptor
   next();
 });
-
+*/
 /* eslint-disable no-new */
 new Vue({
   el: '#app',
