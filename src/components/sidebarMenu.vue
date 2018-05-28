@@ -1,17 +1,17 @@
 <template>
   <ul class="sidebar-menu">
+    <router-link tag="li" class="pageLink" to="/dict">
+      <a>
+        <i class="fa fa-desktop"></i>
+        <span class="page">数据字典管理</span>
+      </a>
+    </router-link>
     <router-link tag="li" class="pageLink" to="/user">
       <a>
         <i class="fa fa-desktop"></i>
         <span class="page">用户管理</span>
       </a>
     </router-link>
-   <router-link tag="li" class="pageLink" to="/dict">
-      <a>
-        <i class="fa fa-desktop"></i>
-        <span class="page">数据字典管理</span>
-      </a>
-   </router-link>
     <router-link tag="li" class="pageLink" to="/hero">
       <a>
         <i class="fa fa-tasks"></i>
@@ -73,6 +73,30 @@
         </li>
       </ul>
     </li>
+    <li class="treeview">
+      <a href="#">
+        <i class="fa fa-folder-o"></i>
+        <span>API管理</span>
+        <span class="pull-right-container">
+          <i class="fa fa-angle-left fa-fw pull-right"></i>
+        </span>
+      </a>
+      <ul class="treeview-menu">
+        <router-link tag="li" class="pageLink" to="/api/doc">
+          <a>
+            <i class="fa fa-tasks"></i>
+            <span class="page">API文档</span>
+          </a>
+        </router-link>
+        <router-link tag="li" class="pageLink" to="/api/debug">
+          <a>
+            <i class="fa fa-tasks"></i>
+            <span class="page">API调试</span>
+          </a>
+        </router-link>
+      </ul>
+    </li>
+
     <router-link tag="li" class="pageLink" to="/repos">
       <a>
         <i class="fa fa-heart"></i>

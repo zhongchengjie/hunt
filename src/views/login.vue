@@ -27,25 +27,19 @@ export default {
   name: 'login',
   data: function(){
   	  return{
+         loginApi:"http://localhost:8809/api/login",
   	  	 phone:"",
   	  	 password:""
   	  }
   },
   methods: {
       loginCheck:function(){
-      	  this.$http.post("http://localhost:8809/api/login",{phone:this.phone,password:this.password}).then(response => {
-        	  var result = response.data;
-        	  if(result.status=="succ"){
-        	  	  layer.msg("登录成功",{icon:1});
-        	  	  store.commit('setLoginUser', result.user)
-                store.commit('setLoginToken', result.token)
-        	  	  this.$router.push("/");
-        	  }else{
-        	  	   layer.msg(result.msg,{icon:7});
-        	  }
-			  }, response => {
-			      layer.msg("请求出错了！",{icon:7});
-			  });
+      	  this.$post(this.loginApi,{phone:this.phone,password:this.password}).then(result => {
+              layer.msg("登录成功",{icon:1});
+              store.commit('setLoginUser', result.user)
+              store.commit('setLoginToken', result.token)
+              this.$router.push("/");
+			    });
       }
   }
 }

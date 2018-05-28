@@ -18,7 +18,7 @@
 		  		  	 	    	  	  </span>
 		  		  	 	    	  </div>
 		  		  	 	    	  <div class="input-group input-group-sm pull-right" style="margin-right:10px">
-												      <span class="input-group-addon">英雄类型</span>	
+												      <span class="input-group-addon">英雄类型</span>
 													    <select v-model="searchCon.heroType" class="form-control input-sm" @change="getHeroList">
 													    	  <option value="" selected="selected">--全部--</option>
 				  		  	 	    	  	    <option value="1">力量英雄</option>
@@ -110,9 +110,9 @@ export default {
         },
         totalCount:0,
         searchCon:{heroType:"",inputText:"",pageSize:10,pageNo:1},
-        queryApi:"http://localhost:8809/api/hero/getAll",
-        addApi:"http://localhost:8809/api/hero/addBatch",
-        editApi:"http://localhost:8809/api/hero/update"
+        queryApi:"api/hero/getAll",
+        addApi:"api/hero/addBatch",
+        editApi:"api/hero/update"
       }
   },
   mounted:function(){
@@ -127,16 +127,9 @@ export default {
   },
   methods:{
   	getHeroList:function(){
-  		  this.$http.post(this.queryApi,{searchCon:this.searchCon}).then(response => {
-        	  var result = response.data
-        	  if(result.status=="succ"){
-        	  	   this.heroList = result.result;
-        	  	   this.totalCount = result.totalCount;
-        	  }else{
-        	  	   layer.msg(result.msg,{icon:7});
-        	  }
-			  }, response => {
-			       layer.msg("请求出错了！",{icon:7});
+  		  this.$post(this.queryApi,{searchCon:this.searchCon}).then(result => {
+             this.heroList = result.result;
+             this.totalCount = result.totalCount;
 			  });
   	},
   	getHeroType:function(type){
@@ -162,7 +155,7 @@ export default {
   		  	 }
   		  	 this.$modal.show(this.editModal);
   		  }
-  		  
+
   	},
     formAjaxSubmit:function(){
     	  if(this.heroInfo._id!=""&&this.heroInfo._id!=null){
@@ -178,31 +171,17 @@ export default {
     	  heroInfo.hero_cn_name = heroInfo.hero_cn_name.replace(/[\r\n]/g,",");
     	  heroInfo.hero_en_name = heroInfo.hero_en_name.replace(/[\r\n]/g,",");
     	  heroInfo.hero_img = heroInfo.hero_img.replace(/[\r\n]/g,",");
-        this.$http.post(this.addApi,{heroInfo:heroInfo}).then(response => {
-        	  var result = response.data;
-        	  if(result.status=="succ"){
-        	  	  layer.msg("添加成功!",{icon:1});
-        	  	  this.$modal.hide(this.addModal);
-        	  	  this.getHeroList();
-        	  }else{
-        	  	   layer.msg(result.msg,{icon:7});
-        	  }
-			  }, response => {
-			      layer.msg("请求出错了！",{icon:7});
+        this.$post(this.addApi,{heroInfo:heroInfo}).then(result => {
+              layer.msg("添加成功!",{icon:1});
+              this.$modal.hide(this.addModal);
+              this.getHeroList();
 			  });
     },
     editHero:function(){
-        this.$http.post(this.editApi,{heroInfo:this.heroInfo}).then(response => {
-        	  var result = response.data;
-        	  if(result.status=="succ"){
-        	  	  layer.msg("修改成功",{icon:1});
-        	  	  this.$modal.hide(this.editModal);
-        	  	  this.getHeroList();
-        	  }else{
-        	  	   layer.msg(result.msg,{icon:7});
-        	  }
-			  }, response => {
-			      layer.msg("请求出错了！",{icon:7});
+        this.$post(this.editApi,{heroInfo:this.heroInfo}).then(result => {
+              layer.msg("修改成功",{icon:1});
+              this.$modal.hide(this.editModal);
+              this.getHeroList();
 			  });
     }
   }

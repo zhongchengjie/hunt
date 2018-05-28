@@ -18,7 +18,7 @@
 		  		  	 	    	  	  </span>
 		  		  	 	    	  </div>
 		  		  	 	    	  <div class="input-group input-group-sm pull-right" style="margin-right:10px">
-												      <span class="input-group-addon">用户类型</span>	
+												      <span class="input-group-addon">用户类型</span>
 													    <select v-model="searchCon.userType" class="form-control input-sm" @change="getUserList">
 													    	  <option value="" selected="selected">--全部--</option>
 				  		  	 	    	  	    <option value="common">普通用户</option>
@@ -49,7 +49,7 @@
 		                <td>{{user.user_steamid}}</td>
 		                <td>{{user.user_tradeurl}}</td>
 		                <td>{{getUserType(user.user_type)}}</td>
-		                <td>{{timeFormat(user.register_time)}}</td>
+		                <td>{{Util.timeFormat(user.register_time,"YYYY-MM-DD HH:mm:ss")}}</td>
 		                <td><a href="javascript:void(0)" @click="showModal(2,user._id)">编辑</a> - <a href="javascript:void(0)">注销</a></td>
 		             </tr>
 		          </tbody>
@@ -60,7 +60,7 @@
 		      <paginat v-if="userList.length>0" :total-count="totalCount" :p-size="searchCon.pageSize"></paginat>
   		  </div><!--end of ibox-content-->
   	</div>
-  	<modal :name="modalName"  :width="500" :height="260" :pivotY="0.3" :pivotX="0.6">
+  	<modal :name="modalName"  :width="500" :height="300" :pivotY="0.3" :pivotX="0.6">
 	      <modal-header :modal-title="modalTitle" :modal-name="modalName"></modal-header>
 	      <div class="modal-body">
            <user-edit :user-info="userInfo"></user-edit>
@@ -104,14 +104,14 @@ export default {
         },
         searchCon:{userType:"",inputText:"",pageSize:15,pageNo:1},
         totalCount:0,
-        queryApi:"http://localhost:8809/api/user/get",
-        addApi:"http://localhost:8809/api/user/add",
-        editApi:"http://localhost:8809/api/user/update"
+        queryApi:"api/user/get",
+        addApi:"api/user/add",
+        editApi:"api/user/update"
       }
   },
   mounted:function(){
   	  var _this = this;
-  	  _this.getUserList();  
+  	  _this.getUserList();
       eventBus.$on("saveClick", _this.formAjaxSubmit)
       eventBus.$on("reloadList",function(pageSize,pageNo){
       	  _this.searchCon.pageSize = parseInt(pageSize);
@@ -121,27 +121,9 @@ export default {
   },
   methods:{
   	getUserList:function(){
-  		  /*this.$http.post(this.queryApi,{searchCon:this.searchCon}).then(response => {
-        	  var result = response.data
-        	  if(result.status=="succ"){
-        	  	   this.userList = result.result;
-        	  	   this.totalCount = result.totalCount;
-        	  }else{
-        	  	   layer.msg(result.msg,{icon:7});
-        	  }
-			  }, response => {
-			       layer.msg("请求出错了！",{icon:7});
-			  });*/
-			  axios.post(this.queryApi,{searchCon:this.searchCon}).then(response => {
-        	  var result = response.data
-        	  if(result.status=="succ"){
-        	  	   this.userList = result.result;
-        	  	   this.totalCount = result.totalCount;
-        	  }else{
-        	  	   layer.msg(result.msg,{icon:7});
-        	  }
-			  }).catch(error => {
-			       layer.msg("请求出错了！",{icon:7});
+        this.$post(this.queryApi,{searchCon:this.searchCon}).then(result => {
+             this.userList = result.result;
+             this.totalCount = result.totalCount;
 			  });
   	},
   	getUserType:function(type){
@@ -150,11 +132,6 @@ export default {
 	  		}else if(type=="vip"){
 	  			 return "vip用户";
 	  		}
-  	},
-  	timeFormat:function(datetime){
-  		  if(datetime){
-  		  	 return moment(datetime).format('YYYY-MM-DD HH:mm:ss');
-  		  }		  
   	},
   	showModal:function(type,id){
   		  if(type==1){
@@ -180,37 +157,23 @@ export default {
     	  else{
     	  	  this.addUser();
     	  }
-        
+
     },
     addUser:function(){
         var userInfo = this.userInfo;
         delete userInfo._id;
         userInfo.user_password = hex_md5(userInfo.user_password)    //md5加密
-        this.$http.post(this.addApi,{userInfo:userInfo}).then(response => {
-        	  var result = response.data;
-        	  if(result.status=="succ"){
-        	  	  layer.msg("添加成功!",{icon:1});
-        	  	  this.$modal.hide(this.modalName);     
-        	  	  this.getUserList();
-        	  }else{
-        	  	   layer.msg(result.msg,{icon:7});
-        	  }			    
-			  }, response => {
-			      layer.msg("请求出错了！",{icon:7});
+        this.$post(this.addApi,{userInfo:userInfo}).then(result => {
+              layer.msg("添加成功!",{icon:1});
+              this.$modal.hide(this.modalName);
+              this.getUserList();
 			  });
     },
     editUser:function(){
-        this.$http.post(this.editApi,{userInfo:this.userInfo}).then(response => {
-        	  var result = response.data;
-        	  if(result.status=="succ"){
-        	  	  layer.msg("修改成功",{icon:1});
-        	  	  this.$modal.hide(this.modalName);     
-        	  	  this.getUserList();
-        	  }else{
-        	  	   layer.msg(result.msg,{icon:7});
-        	  }			    
-			  }, response => {
-			      layer.msg("请求出错了！",{icon:7});
+        this.$post(this.editApi,{userInfo:this.userInfo}).then(result => {
+              layer.msg("修改成功",{icon:1});
+              this.$modal.hide(this.modalName);
+              this.getUserList();
 			  });
     }
   }

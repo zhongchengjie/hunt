@@ -64,6 +64,7 @@
 .table tr td{
     color: #777;
     font-size: 13px;
+    vertical-align: middle!important;
 }
 
 .table-edit tr td,.table-info tr td{

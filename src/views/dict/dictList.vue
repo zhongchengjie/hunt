@@ -12,11 +12,10 @@
   		  	 	    <div class="col-sm-9">
   		  	 	    	 <form class="form-inline">
 			  		  	 	     <div class="input-group input-group-sm pull-right">
-											      <span class="input-group-addon">字典项名称</span>	
-												    <select v-model="dict_name" class="form-control input-sm" @change="getDictList">
-			  		  	 	    	  	  <option value="accessories_rarity" selected="selected">饰品稀有度</option>
-			  		  	 	    	  	  <option value="accessories_type">饰品类型</option>
-			  		  	 	    	    </select>
+											      <span class="input-group-addon">字典项名称</span>
+												    <select v-model="dict_name_obj"  class="form-control input-sm" @change="getDictListByType">
+			  		  	 	    	        <option v-for="dict in dictNameList" :value="{value:dict.dict_name,text:dict.dict_descr}">{{dict.dict_descr}}</option>
+                            </select>
 										   </div>
 									 </form>
   		  	 	    </div>
@@ -26,7 +25,7 @@
 		             <tr>
 		                <th>序号</th>
 		                <th>code</th>
-		                <th>value</th>
+		                <th>code_name</th>
 		                <th>排序</th>
 		                <th>是否在使用</th>
 		                <th>创建时间</th>
@@ -37,7 +36,7 @@
 		             <tr v-for="(dict,index) in dictList">
 		                <td>{{index+1}}</td>
 		                <td>{{dict.dict_code}}</td>
-		                <td>{{dict.dict_value}}</td>
+		                <td>{{dict.dict_code_name}}</td>
 		                <td>{{dict.order}}</td>
 		                <td v-html="getInuse(dict.in_use)"></td>
 		                <td>{{timeFormat(dict.create_time)}}</td>
@@ -47,7 +46,7 @@
 		      </table>
   		  </div><!--end of ibox-content-->
   	</div>
-  	<modal :name="modalName"  :width="320" :height="290" :pivotY="0.3" :pivotX="0.6">
+  	<modal :name="modalName"  :width="360" :height="340" :pivotY="0.3" :pivotX="0.6">
 	      <modal-header :modal-title="modalTitle" :modal-name="modalName"></modal-header>
 	      <div class="modal-body">
            <dict-edit :dict-info="dictInfo"></dict-edit>
@@ -76,37 +75,46 @@ export default {
       return{
       	modalName:"dictEditModal",
       	modalTitle:"添加字典项",
-      	dict_name:"accessories_rarity",
+        dict_name_obj:{},
+      	dictNameList:[],
         dictList:[],
         dictInfo:{
         	   _id:"",
-             dict_name: "",
+             dict_name:"",
+             dict_descr:"",
              dict_code:"",
-             dict_value: "",
+             dict_code_name: "",
              order:""
         },
-        queryApi:"http://localhost:8809/api/dataDict/get",
-        addApi:"http://localhost:8809/api/dataDict/add",
-        editApi:"http://localhost:8809/api/dataDict/update",
+        queryApi:"api/dataDict/get",
+        querNameApi:"api/dataDict/getName",
+        addApi:"api/dataDict/add",
+        editApi:"api/dataDict/update",
       }
   },
   mounted:function(){
-  	  this.getDictList();  
+  	  this.getDictList();
       eventBus.$on("saveClick", this.formAjaxSubmit)
   },
   methods:{
-  	getDictList:function(){
-  		  this.$http.post(this.queryApi,{dict_name:this.dict_name}).then(response => {
-        	  var result = response.data
-        	  if(result.status=="succ"){
-        	  	   this.dictList = result.result;
-        	  }else{
-        	  	   layer.msg(result.msg,{icon:7});
-        	  }
-			  }, response => {
-			       layer.msg("请求出错了！",{icon:7});
-			  });
+  	getDictList:async function(){
+  	    //先获取字典项名称，回填select
+        var result =  await this.$fetch(this.querNameApi);     //.....(出错时如何处理，待完善）
+        this.dictNameList = result.result;
+        if(this.dictNameList.length>0){
+           this.dict_name_obj = {value:this.dictNameList[0].dict_name,text:this.dictNameList[0].dict_descr}
+        }
+        //默认查询第一个字典项的数据字典
+        this.$post(this.queryApi,{dict_name:this.dict_name_obj.value}).then(result => {
+           this.dictList = result.result;
+			  })
   	},
+    getDictListByType: function(){
+        //默认查询第一个字典项的数据字典
+        this.$post(this.queryApi,{dict_name:this.dict_name_obj.value}).then(result => {
+           this.dictList = result.result;
+        })
+    },
   	getInuse:function(in_use){
 	  		if(in_use=="1"){
 	  			 return "<label class='label label-success'>使用中</label>";
@@ -117,12 +125,12 @@ export default {
     timeFormat:function(datetime){
   		  if(datetime){
   		  	 return moment(datetime).format('YYYY-MM-DD HH:mm:ss');
-  		  }		  
+  		  }
   	},
   	showModal:function(type,id){
   		  if(type==1){
   		  	 this.modalTitle = "添加字典项";
-  		  	 this.dictInfo = {_id:"",dict_name: this.dict_name,dict_code:"",dict_value: "",order:""};
+  		  	 this.dictInfo = {_id:"",dict_name: this.dict_name_obj.value,dict_descr:this.dict_name_obj.text,dict_code:"",dict_code_name: "",order:""};
   		  }else{
   		  	 this.modalTitle = "编辑字典项";
   		  	 var list = this.dictList;
@@ -132,7 +140,7 @@ export default {
 		  	 	   	  this.dictInfo = list[i]
 		  	 	   }
 		  	   }
-  		  	
+
   		  }
   		  this.$modal.show(this.modalName);
   	},
@@ -143,37 +151,26 @@ export default {
     	  else{
     	  	  this.addDict();
     	  }
-        
+
     },
     addDict:function(){
     	  var dictInfo = this.dictInfo;
     	  delete dictInfo._id        //添加是不需要_id属性
-        this.$http.post(this.addApi,{dictInfo:dictInfo}).then(response => {
-        	  var result = response.data;
-        	  if(result.status=="succ"){
-        	  	  layer.msg("添加成功!",{icon:1});
-        	  	  this.$modal.hide(this.modalName);     
-        	  	  this.getDictList();
-        	  }else{
-        	  	   layer.msg(result.msg,{icon:7});
-        	  }			    
-			  }, response => {
-			      layer.msg("请求出错了！",{icon:7});
+        this.$post(this.addApi,{dictInfo:dictInfo}).then(response => {
+            layer.msg("添加成功!",{icon:1});
+            this.$modal.hide(this.modalName);
+            this.getDictList();
 			  });
     },
     editDict:function(){
-        this.$http.post(this.editApi,{dictInfo:this.dictInfo}).then(response => {
-        	  var result = response.data;
-        	  if(result.status=="succ"){
-        	  	  layer.msg("修改成功",{icon:1});
-        	  	  this.$modal.hide(this.modalName);     
-        	  	  this.getDictList();
-        	  }else{
-        	  	   layer.msg(result.msg,{icon:7});
-        	  }			    
-			  }, response => {
-			      layer.msg("请求出错了！",{icon:7});
+        this.$post(this.editApi,{dictInfo:this.dictInfo}).then(response => {
+            layer.msg("修改成功",{icon:1});
+            this.$modal.hide(this.modalName);
+            this.getDictList();
 			  });
+    },
+    delDict:function(){
+
     }
   }
 }

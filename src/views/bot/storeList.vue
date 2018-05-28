@@ -18,7 +18,7 @@
 		  		  	 	    	  	  </span>
 		  		  	 	    	  </div>
 		  		  	 	    	  <div class="input-group input-group-sm pull-right" style="margin-right:10px">
-												      <span class="input-group-addon">饰品状态</span>	
+												      <span class="input-group-addon">饰品状态</span>
 													    <select v-model="searchCon.assetState" class="form-control input-sm" @change="getStoretList">
 													    	  <option value="" selected="selected">--全部--</option>
 				  		  	 	    	  	    <option value="1">未上架</option>
@@ -73,14 +73,14 @@
         </div>
 	      <modal-footer modal-name="userInfoModal" :type="2"></modal-footer>
 	  </modal>
-	  <modal name="botInfoModal"  :width="500" :height="240" :pivotY="0.3" :pivotX="0.6">
+	  <modal name="botInfoModal"  :width="610" :height="240" :pivotY="0.3" :pivotX="0.6">
 	      <modal-header :modal-title="modalTitle" modal-name="botInfoModal"></modal-header>
 	      <div class="modal-body">
 	      	   <bot-info :info-obj="infoObj" ></bot-info>
         </div>
 	      <modal-footer modal-name="botInfoModal" :type="2"></modal-footer>
 	  </modal>
-	  
+
   </section>
 
 </template>
@@ -101,7 +101,7 @@ export default {
       "bot-info": botInfo,
       "user-info": userInfo,
       "asset-info": assetInfo
-      
+
   },
   data:function(){
       return{
@@ -110,23 +110,17 @@ export default {
         storeList:[],
         infoObj:{},
         searchCon:{assetState:"",inputText:"",pageSize:15,pageNo:1},
-        queryApi:"http://localhost:8809/api/store/getStoreInfo?type=4"
+        queryApi:"api/store/getStoreInfo?type=4"
       }
   },
   mounted:function(){
-  	  this.getStoretList();  
+  	  this.getStoretList();
   },
   methods:{
   	getStoretList:function(){
-  		  this.$http.get(this.queryApi).then(response => {
-        	  var result = response.data
-        	  if(result.status=="succ"){
-        	  	   this.storeList = result.result;
-        	  }else{
-        	  	   layer.msg(result.msg,{icon:7});
-        	  }
-			  }, response => {
-			       layer.msg("请求出错了！",{icon:7});
+       //....... 按搜索条件过滤，待完善
+  		  this.$fetch(this.queryApi).then(result => {
+             this.storeList = result.result;
 			  });
   	},
   	getAssetState:function(state){
@@ -140,10 +134,10 @@ export default {
   		  this.infoObj = infoObj;
   		  if(type==1){
   		  	 this.modalTitle = "饰品详细信息";
-  		  	 this.$modal.show("assetInfoModal");	
+  		  	 this.$modal.show("assetInfoModal");
   		  }else if(type==2){
   		  	 this.modalTitle = "用户["+ infoObj.user_steamid+"]详细信息";
-  		  	 this.$modal.show("userInfoModal");		  	 
+  		  	 this.$modal.show("userInfoModal");
   		  }else if(type==3){
   		  	 this.modalTitle = "机器人["+ infoObj.bot_steamid+"]详细信息";
   		  	 this.$modal.show("botInfoModal");

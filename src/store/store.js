@@ -27,6 +27,9 @@ const mutations = {
      console.log("setLoginToken========"+token);
      localStorage.setItem("token",token)
      state.token = token;
+
+     //console.log(Vue.$axios);
+     //this.$axios.defaults.headers.common['Authorization'] = `Bearer ${accessToken}`
   },
   setLoginUser (state, user) {
      console.log("setLoginUser========"+user);

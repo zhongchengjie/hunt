@@ -1,2 +1,4 @@
 1、去掉jquery和boostrap.min.js
 2、modal的优化
+3、store.js与localstorage
+4、get与post请求，head请求、put请求

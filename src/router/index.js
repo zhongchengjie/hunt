@@ -7,6 +7,7 @@ import dictView from '@/views/dict/dictList'
 import heroView from '@/views/hero/heroList'
 import botView from '@/views/bot/botList'
 import storeView from '@/views/bot/storeList'
+import apiDocView from '@/views/api/apiDoc'
 
 Vue.use(Router)
 
@@ -45,6 +46,11 @@ export default new Router({
           path: 'bot/store',
           component: storeView,
           name: '机器人库存',
+          meta: {description: ''}
+        },{
+          path: 'api/doc',
+          component: apiDocView,
+          name: 'API文档',
           meta: {description: ''}
         }]
     }

@@ -18,7 +18,7 @@
 		  		  	 	    	  	  </span>
 		  		  	 	    	  </div>
 		  		  	 	    	  <div class="input-group input-group-sm pull-right" style="margin-right:10px">
-												      <span class="input-group-addon">登录状态</span>	
+												      <span class="input-group-addon">登录状态</span>
 													    <select v-model="searchCon.loginState" class="form-control input-sm" @change="getBotList">
 													    	  <option value="" selected="selected">--全部--</option>
 				  		  	 	    	  	    <option value="1">在线</option>
@@ -26,8 +26,8 @@
 				  		  	 	    	    </select>
 											  </div>
 											  <div class="input-group input-group-sm pull-right" style="margin-right:10px">
-												      <span class="input-group-addon">交易状态</span>	
-													    <select v-model="searchCon.loginState" class="form-control input-sm" @change="getBotList">
+												      <span class="input-group-addon">交易状态</span>
+													    <select v-model="searchCon.tradeState" class="form-control input-sm" @change="getBotList">
 													    	  <option value="" selected="selected">--全部--</option>
 				  		  	 	    	  	    <option value="1">空闲中</option>
 				  		  	 	    	  	    <option value="2">交易中</option>
@@ -56,7 +56,7 @@
 		                <td>{{bot.shared_secret}}</td>
 		                <td>{{bot.port}}</td>
 		                <td v-html="getLoginState(bot.login_state)"></td>
-		                <td v-html="getTradeState(bot.trade_state)"></td>             
+		                <td v-html="getTradeState(bot.trade_state)"></td>
 		                <td>{{timeFormat(bot.last_login_time)}}</td>
 		                <td><a href="javascript:void(0)" @click="showModal(2,bot._id)">编辑</a> - <a  v-if="bot.login_state=='-1'" href="javascript:void(0)" @click="botLogin(bot._id,bot.port,bot.bot_steamid,bot.account_name,bot.login_pwd,bot.shared_secret)">登录</a>  <a  v-if="bot.login_state=='1'" href="javascript:void(0)" @click="botLogout(bot._id,bot.port)">退出</a></td>
 		             </tr>
@@ -108,29 +108,23 @@ export default {
              port:"",
              phone:"13560472084"
         },
-        searchCon:{loginState:"",inputText:"",pageSize:15,pageNo:1},
-        queryApi:"http://localhost:8809/api/bot/get",
-        addApi:"http://localhost:8809/api/bot/add",
-        editApi:"http://localhost:8809/api/bot/update",
-        loginApi:"http://localhost:8809/api/bot/login",
-        logoutApi:"http://localhost:8809/api/bot/logout"
+        searchCon:{loginState:"",tradeState:"",inputText:"",pageSize:15,pageNo:1},
+        queryApi:"api/bot/get",
+        addApi:"api/bot/add",
+        editApi:"api/bot/update",
+        loginApi:"api/bot/login",
+        logoutApi:"api/bot/logout"
       }
   },
   mounted:function(){
-  	  this.getBotList();  
+  	  this.getBotList();
       eventBus.$on("saveClick", this.formAjaxSubmit)
   },
   methods:{
   	getBotList:function(){
-  		  this.$http.post(this.queryApi).then(response => {
-        	  var result = response.data
-        	  if(result.status=="succ"){
-        	  	   this.botList = result.result;
-        	  }else{
-        	  	   layer.msg(result.msg,{icon:7});
-        	  }
-			  }, response => {
-			       layer.msg("请求出错了！",{icon:7});
+  	    //....... 按搜索条件过滤，待完善
+  		  this.$post(this.queryApi).then(result => {
+           this.botList = result.result;
 			  });
   	},
   	getTradeState:function(state){
@@ -148,7 +142,7 @@ export default {
     timeFormat:function(datetime){
   		  if(datetime){
   		  	 return moment(datetime).format('YYYY-MM-DD HH:mm:ss');
-  		  }		  
+  		  }
   	},
   	showModal:function(type,id){
   		  if(type==1){
@@ -173,65 +167,37 @@ export default {
     	  else{
     	  	  this.addBot();
     	  }
-        
+
     },
     addBot:function(){
     	  var botInfo = this.botInfo;
     	  delete botInfo._id        //添加是不需要_id属性
-        this.$http.post(this.addApi,{botInfo:botInfo}).then(response => {
-        	  var result = response.data;
-        	  if(result.status=="succ"){
-        	  	  layer.msg("添加成功!",{icon:1});
-        	  	  this.$modal.hide(this.modalName);     
-        	  	  this.getBotList();
-        	  }else{
-        	  	   layer.msg(result.msg,{icon:7});
-        	  }			    
-			  }, response => {
-			      layer.msg("请求出错了！",{icon:7});
+        this.$post(this.addApi,{botInfo:botInfo}).then(result => {
+            layer.msg("添加成功!",{icon:1});
+            this.$modal.hide(this.modalName);
+            this.getBotList();
 			  });
     },
     editBot:function(){
-        this.$http.post(this.editApi,{botInfo:this.botInfo}).then(response => {
-        	  var result = response.data;
-        	  if(result.status=="succ"){
-        	  	  layer.msg("修改成功",{icon:1});
-        	  	  this.$modal.hide(this.modalName);     
-        	  	  this.getBotList();
-        	  }else{
-        	  	   layer.msg(result.msg,{icon:7});
-        	  }			    
-			  }, response => {
-			      layer.msg("请求出错了！",{icon:7});
+        this.$post(this.editApi,{botInfo:this.botInfo}).then(result => {
+            layer.msg("修改成功",{icon:1});
+            this.$modal.hide(this.modalName);
+            this.getBotList();
 			  });
     },
     botLogin:function(id,port,steamId,account_name,login_pwd,shared_secret){
     	  layer.msg('正在登录...', {icon: 16,time: 2000,offset: '100px'});
 	      var botInfo = {_id:id,port:port,steamId:steamId,account_name:account_name,login_pwd:login_pwd,shared_secret:shared_secret}
-	      this.$http.post(this.loginApi,{botInfo:botInfo}).then(response => {
-		    	  var result = response.data;
-		    	  if(result.status=="succ"){
-		    	  	   layer.msg("登录成功",{icon:1});  
-		    	  	   this.getBotList();
-		    	  }else{
-		    	  	   layer.msg(result.msg,{icon:7});
-		    	  }			    
-		    }, response => {
-		      layer.msg("请求出错了！",{icon:7});
+	      this.$post(this.loginApi,{botInfo:botInfo}).then(result => {
+            layer.msg("登录成功",{icon:1});
+            this.getBotList();
 		    });
     },
     botLogout:function(id,port){
     	  layer.msg('正在退出...', {icon: 16,time: 1000,offset: '100px'});
     	  var botInfo = {bot_id:id,port:port};
-    	  this.$http.post(this.logoutApi,{botInfo:botInfo}).then(response => {
-        	  var result = response.data;
-        	  if(result.status=="succ"){  
-        	  	  this.getBotList();
-        	  }else{
-        	  	   layer.msg(result.msg,{icon:7});
-        	  }			    
-			  }, response => {
-			      layer.msg("请求出错了！",{icon:7});
+    	  this.$post(this.logoutApi,{botInfo:botInfo}).then(result => {
+    	      this.getBotList();
 			  });
     }
   }

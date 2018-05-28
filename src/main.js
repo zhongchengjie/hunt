@@ -3,27 +3,28 @@
 import Vue from 'vue'
 import App from './App'
 import router from './router'
-import axios from 'axios'
 import VModal from 'vue-js-modal'
 import store from './store/store'
+import {post,fetch} from './util/http'
+import {util} from './util/util'
 
 Vue.config.productionTip = false
-Vue.prototype.axios = axios
 
 //vue-js-modal
 Vue.use(VModal)
-
 //eventBus
 window.eventBus = new Vue();
-
 //vuex
 window.store = store;
+//定义全局变量
+Vue.prototype.$post=post;
+Vue.prototype.$fetch=fetch;
 
-//vue-resource
+Vue.prototype.Util = util;
 
 // Some middleware to help us ensure the user is authenticated.
 router.beforeEach((to, from, next) => {
-  //console.log(to.path);
+  console.log(to.path);
   if (to.path!="/login"&&(!localStorage.getItem("token") || localStorage.getItem("token") == '')) {
     // this route requires auth, check if logged in
     // if not, redirect to login page.
@@ -55,8 +56,12 @@ router.beforeEach((to, from, next) => {
 
   // continue to next interceptor
   next();
-});
-*/
+});*/
+
+
+
+
+
 /* eslint-disable no-new */
 new Vue({
   el: '#app',
