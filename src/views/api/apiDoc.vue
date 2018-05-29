@@ -8,8 +8,9 @@
   		  	 <div class="ibox-content-search row">
   		  	 	    <div class="col-sm-3">
   		  	 	    	  <button type="button" class="btn btn-primary btn-sm" @click="showModal(1)">添加API说明</button>
+  		  	 	    	  <button type="button" class="btn btn-primary btn-sm" @click="test" style="margin-left:10px">测试</button>
   		  	 	    </div>
-  		  	 	    <div class="col-sm-9">
+  		  	 	    <div class="col-sm-6">
   		  	 	    	  <form class="form-inline">
                          <div class="input-group pull-right" style="width:240px">
                               <input v-model="searchCon.inputText" type="text" placeholder="请输入API名称或API描述" class="input-sm form-control">
@@ -170,6 +171,24 @@ export default {
         this.$modal.hide(this.modalName);
         this.getApiDocList();
       });
+    },
+    test:function(){
+    	 var apiDocInfo1 = {_id:"123",api_name:"update by task1"}
+    	 var apiDocInfo2 = {api_name:"add by task2 at "+new Date().getTime()}
+    	 var apiDocInfo3 = {_id:"456",api_name:"update by task3"}
+    	 var task1 = this.$post(this.editApi,{apiDocInfo:apiDocInfo1});
+    	 var task2 = this.$post(this.addApi,{apiDocInfo:apiDocInfo2});
+    	 var task3 = this.$post(this.editApi,{apiDocInfo:apiDocInfo3});
+    	 //并行执行任务。其中某个任务出错时，并不会影响其它并行任务的执行。
+    	 Promise.all([task1, task2]).then(function (results) {
+			    console.log(results);   
+			 }).catch(err=>{
+			 	  console.log(err);
+			 })
+			 //串行执行任务。
+			 /*task1.then(task2).catch(err=>{
+			 	  console.log(err);
+			 })*/
     }
   }
 }
