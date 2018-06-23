@@ -49,7 +49,7 @@
 		                <td v-html="getHeroType(hero.hero_type)"></td>
 		                <td><img :src="'/static/img/hero/'+hero.hero_img"></td>
 		                <td>{{hero.order}}</td>
-		                <td><a href="javascript:void(0)" @click="showModal(2,hero._id)">编辑</a> - <a href="javascript:void(0)">删除</a></td>
+		                <td><a href="javascript:void(0)" @click="showModal(2,hero._id)">编辑</a><!-- - <a href="javascript:void(0)">删除</a>--></td>
 		             </tr>
 		          </tbody>
               <tbody v-else>

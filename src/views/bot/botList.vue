@@ -58,7 +58,9 @@
 		                <td v-html="getLoginState(bot.login_state)"></td>
 		                <td v-html="getTradeState(bot.trade_state)"></td>
 		                <td>{{timeFormat(bot.last_login_time)}}</td>
-		                <td><a href="javascript:void(0)" @click="showModal(2,bot._id)">编辑</a> - <a  v-if="bot.login_state=='-1'" href="javascript:void(0)" @click="botLogin(bot._id,bot.port,bot.bot_steamid,bot.account_name,bot.login_pwd,bot.shared_secret)">登录</a>  <a  v-if="bot.login_state=='1'" href="javascript:void(0)" @click="botLogout(bot._id,bot.port)">退出</a></td>
+		                <td><a href="javascript:void(0)" @click="showModal(2,bot._id)">编辑</a>
+              <!--        - <a  v-if="bot.login_state=='-1'" href="javascript:void(0)" @click="botLogin(bot._id,bot.port,bot.bot_steamid,bot.account_name,bot.login_pwd,bot.shared_secret)">登录</a>
+                        <a  v-if="bot.login_state=='1'" href="javascript:void(0)" @click="botLogout(bot._id,bot.port)">退出</a>--></td>
 		             </tr>
 		          </tbody>
 		          <tbody v-else>

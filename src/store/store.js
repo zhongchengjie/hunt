@@ -33,7 +33,7 @@ const mutations = {
   },
   setLoginUser (state, user) {
      console.log("setLoginUser========"+user);
-    localStorage.setItem("user",JSON.stringify(user))
+     localStorage.setItem("user",JSON.stringify(user))
      state.user = user;
   }
 

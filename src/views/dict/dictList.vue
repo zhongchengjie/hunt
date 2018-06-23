@@ -7,7 +7,7 @@
   		  <div class="ibox-content">
   		  	 <div class="ibox-content-search row">
   		  	 	    <div class="col-sm-3">
-  		  	 	    	  <button type="button" class="btn btn-primary btn-sm" @click="showModal(1)">添加字典项</button>
+  		  	 	    	  <button type="button" class="btn btn-primary btn-sm" @click="showModal(1)">新增字典项</button>
   		  	 	    </div>
   		  	 	    <div class="col-sm-9">
   		  	 	    	 <form class="form-inline">
@@ -24,9 +24,9 @@
 		          <thead>
 		             <tr>
 		                <th>序号</th>
+                    <th>排序</th>
 		                <th>code</th>
 		                <th>code_name</th>
-		                <th>排序</th>
 		                <th>是否在使用</th>
 		                <th>创建时间</th>
 		                <th>操作</th>
@@ -35,12 +35,12 @@
 		          <tbody>
 		             <tr v-for="(dict,index) in dictList">
 		                <td>{{index+1}}</td>
+                    <td>{{dict.order}}</td>
 		                <td>{{dict.dict_code}}</td>
 		                <td>{{dict.dict_code_name}}</td>
-		                <td>{{dict.order}}</td>
 		                <td v-html="getInuse(dict.in_use)"></td>
-		                <td>{{timeFormat(dict.create_time)}}</td>
-		                <td><a href="javascript:void(0)" @click="showModal(2,dict._id)">编辑</a> - <a href="javascript:void(0)">删除</a></td>
+		                <td>{{Util.timeFormat(dict.create_time,"YYYY-MM-DD HH:mm:ss")}}</td>
+		                <td><a href="javascript:void(0)" @click="showModal(2,dict._id)">编辑</a> - <a href="javascript:;" @click="delDict(dict._id)">删除</a></td>
 		             </tr>
 		          </tbody>
 		      </table>
@@ -62,7 +62,6 @@
 import modalHeader from '../../components/modalHeader.vue'
 import modalFooter from '../../components/modalFooter.vue'
 import dictEdit from './dictEdit.vue'
-import moment from  'moment'
 
 export default {
   name: 'dict',
@@ -90,6 +89,7 @@ export default {
         querNameApi:"api/dataDict/getName",
         addApi:"api/dataDict/add",
         editApi:"api/dataDict/update",
+        delApi:"api/dataDict/del"
       }
   },
   mounted:function(){
@@ -99,33 +99,27 @@ export default {
   methods:{
   	getDictList:async function(){
   	    //先获取字典项名称，回填select
-        var result =  await this.$fetch(this.querNameApi);     //.....(出错时如何处理，待完善）
-        this.dictNameList = result.result;
-        if(this.dictNameList.length>0){
-           this.dict_name_obj = {value:this.dictNameList[0].dict_name,text:this.dictNameList[0].dict_descr}
+        try{
+            let result =  await this.$fetch(this.querNameApi);
+            this.dictNameList = result.result;
+            if(this.dictNameList.length>0){
+              this.dict_name_obj = {value:this.dictNameList[0].dict_name,text:this.dictNameList[0].dict_descr}
+            }
+        }catch(err){
+           layer.msg(err,{icon:7});
         }
+
         //默认查询第一个字典项的数据字典
-        this.$post(this.queryApi,{dict_name:this.dict_name_obj.value}).then(result => {
-           this.dictList = result.result;
-			  })
+        this.getDictListByType();
   	},
+    //下拉列表切换时，查询数据字典
     getDictListByType: function(){
-        //默认查询第一个字典项的数据字典
         this.$post(this.queryApi,{dict_name:this.dict_name_obj.value}).then(result => {
            this.dictList = result.result;
         })
     },
   	getInuse:function(in_use){
-	  		if(in_use=="1"){
-	  			 return "<label class='label label-success'>使用中</label>";
-	  		}else if(in_use=="0"){
-	  			 return "<label class='label label-warning'>已注销</label>";
-	  		}
-  	},
-    timeFormat:function(datetime){
-  		  if(datetime){
-  		  	 return moment(datetime).format('YYYY-MM-DD HH:mm:ss');
-  		  }
+        return "<label class='label label-success'>使用中</label>";
   	},
   	showModal:function(type,id){
   		  if(type==1){
@@ -166,11 +160,19 @@ export default {
         this.$post(this.editApi,{dictInfo:this.dictInfo}).then(response => {
             layer.msg("修改成功",{icon:1});
             this.$modal.hide(this.modalName);
-            this.getDictList();
+            this.getDictListByType();
 			  });
     },
-    delDict:function(){
-
+    delDict:function(dict_id){
+      layer.confirm('确定要删除所选的字典项吗？',{icon: 3, title:'删除提示'},
+        index => {
+          layer.close(index);
+          this.$post(this.delApi, {dict_id: dict_id}).then(response => {
+            layer.msg("删除成功", {icon: 1});
+            this.getDictListByType();
+          });
+        }
+      );
     }
   }
 }

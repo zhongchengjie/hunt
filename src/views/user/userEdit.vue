@@ -1,12 +1,15 @@
 <template>
-    <form name="userEditForm"  autocomplete="off">
-    	<input type="hidden" name="_id" v-model="userInfo._id">
+    <form name="userEditForm">
+    	  <input type="hidden" name="_id" v-model="userInfo._id">
         <table class="table table-edit">
             <tr>
                 <td width="80px">手机号码</td>
                 <td width="180px"><input type="tel" name="user_phone" v-model="userInfo.user_phone" class="form-control input-sm"></td>
                 <td width="80px">登录密码</td>
-                <td width="180px"><input type="password" name="user_password" v-model="userInfo.user_password" class="form-control input-sm" :readonly="ifreadonly"></td>
+                <td width="180px">
+                  <input style="position: absolute;left:9999px" /><!--解决密码自动填充的问题-->
+                  <input type="password" name="user_password" v-model="userInfo.user_password" class="form-control input-sm" :readonly="ifreadonly">
+                </td>
             </tr>
             <tr>
                 <td>用户名</td>
@@ -43,9 +46,10 @@ export default {
 	  	}
 	  },
 	  created:function(){
-	  	 console.log(this.userInfo.user_password);
+	  	 //console.log(this.userInfo.user_password);
 	  	 if(this.userInfo.user_password!=""){
-	  	 	this.ifreadonly=true;
+	  	 	  this.ifreadonly=true;
+          this.userInfo.user_password = "11111111";
 	  	 }
 	  }
 }

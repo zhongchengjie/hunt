@@ -40,18 +40,23 @@
 
 .ibox .ibox-title h5{
 	font-size: 14px;
-    margin: 0 0 7px;
-    font-weight: 600
+  margin: 0 0 7px;
+  font-weight: 600
 }
 
 .ibox .ibox-content {
-    padding: 15px 20px 20px 20px;
-    border-color: #e7eaec;
-    border-style: solid none none;
-    border-width: 1px 0;
+  padding: 15px 20px 20px 20px;
+  border-color: #e7eaec;
+  border-style: solid none none;
+  border-width: 1px 0;
 }
 
-.ibox .ibox-content-search {
+.input-group .input-group-addon:first-child{
+  border-top-left-radius: 3px;
+  border-bottom-left-radius: 3px;
+}
+
+.ibox .ibox-content-search,.ibox .ibox-content-panel{
 	margin-bottom: 20px
 }
 
@@ -90,4 +95,40 @@
 .table-info.table-bordered tr td{
 	border-top:1px solid #e6e6e6;
 	border-left:1px solid #e6e6e6
+}
+
+.ipanel{
+  margin-bottom:25px
+}
+
+.ipanel .ipanel-header{
+  background-color: #ffffff;
+  border-color: #e7eaec;
+  border-style: solid solid none;
+  border-width: 2px 0 0;
+  padding: 15px 15px 7px;
+  min-height: 48px;
+}
+
+.ipanel-header h5{
+  display: inline-block;
+  font-size: 14px;
+  margin: 0 0 7px;
+  padding: 0;
+  text-overflow: ellipsis;
+  font-weight: 600;
+  color:rgb(103, 106, 108)
+}
+.ipanel .ipanel-content{
+  background-color: #ffffff;
+  padding: 15px 20px 20px 20px;
+  border-color: #e7eaec;
+  border-style: solid solid none;
+  border-width: 1px 0;
+}
+
+.ipanel-content h1{
+  margin:0;
+  color:rgb(103, 106, 108);
+  text-align:center;
 }

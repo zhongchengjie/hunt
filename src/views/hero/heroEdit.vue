@@ -10,9 +10,9 @@
             </tr>
             <tr>
             	<td>简称</td>
-                <td><input class="form-control input-sm" v-model="heroInfo.hero_short_name"></td>  
+                <td><input class="form-control input-sm" v-model="heroInfo.hero_short_name"></td>
                 <td>图片路径</td>
-                <td><input class="form-control input-sm" v-model="heroInfo.hero_img"></td>        
+                <td><input class="form-control input-sm" v-model="heroInfo.hero_img"></td>
             </tr>
             <tr>
                 <td >英雄类型</td>
@@ -23,10 +23,10 @@
                 	  	   <option value="3">智力英雄</option>
                 	  </select>
                 </td>
-                <td>起始序号</td>
+                <td>序号</td>
                 <td><input type="number" name="" v-model="heroInfo.order" class="form-control input-sm"></td>
             </tr>
-           
+
         </table>
     </form>
 </template>

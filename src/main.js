@@ -30,7 +30,8 @@ router.beforeEach((to, from, next) => {
     // if not, redirect to login page.
     console.log('Not authenticated')
     next({
-       path: '/login'
+       path: '/login',
+       query: { redirect: to.fullPath }
     })
   } else {
     next()
@@ -65,7 +66,7 @@ router.beforeEach((to, from, next) => {
 /* eslint-disable no-new */
 new Vue({
   el: '#app',
-  router,
+  router:router,
   store: store,
   template: '<App/>',
   components: { App }

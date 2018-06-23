@@ -50,7 +50,7 @@
 		                <td>{{user.user_tradeurl}}</td>
 		                <td>{{getUserType(user.user_type)}}</td>
 		                <td>{{Util.timeFormat(user.register_time,"YYYY-MM-DD HH:mm:ss")}}</td>
-		                <td><a href="javascript:void(0)" @click="showModal(2,user._id)">编辑</a> - <a href="javascript:void(0)">注销</a></td>
+		                <td><a href="javascript:void(0)" @click="showModal(2,user._id)">编辑</a><!-- - <a href="javascript:void(0)">注销</a>--></td>
 		             </tr>
 		          </tbody>
 		          <tbody v-else>
@@ -77,7 +77,6 @@ import modalHeader from '../../components/modalHeader.vue'
 import modalFooter from '../../components/modalFooter.vue'
 import userEdit from './userEdit.vue'
 import paginat from '../../components/paginat.vue'
-import moment from  'moment'
 
 export default {
   name: 'user',
@@ -170,7 +169,10 @@ export default {
 			  });
     },
     editUser:function(){
-        this.$post(this.editApi,{userInfo:this.userInfo}).then(result => {
+        //不能修改密码
+        var userInfo = this.userInfo;
+        delete userInfo.user_password;
+        this.$post(this.editApi,{userInfo:userInfo}).then(result => {
               layer.msg("修改成功",{icon:1});
               this.$modal.hide(this.modalName);
               this.getUserList();

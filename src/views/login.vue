@@ -4,16 +4,16 @@
         <div class="container">
           <img src="/static/img/logo.png" class="center-block logo">
           <div class="text-center col-md-4 col-sm-offset-4">
-            <form class="ui form loginForm" autocomplete="off">
+            <form class="ui form loginForm" autocomplete="off" @submit.prevent="loginCheck">
               <div class="input-group">
                 <span class="input-group-addon"><i class="fa fa-envelope"></i></span>
-                <input class="form-control"  type="text" v-model="phone">
+                <input class="form-control"  type="text" v-model="account">
               </div>
               <div class="input-group">
-                <span class="input-group-addon"><i class="fa fa-lock" style="font-size:20px"></i></span>
+                <span class="input-group-addon"><i class="fa fa-lock" style="font-size:21px"></i></span>
                 <input class="form-control"  type="password"  v-model="password">
               </div>
-              <button type="submit" class="btn btn-primary btn-lg" @click="loginCheck">Submit</button>
+              <button type="submit" class="btn btn-primary btn-lg">Submit</button>
             </form>
           </div>
         </div>
@@ -27,18 +27,20 @@ export default {
   name: 'login',
   data: function(){
   	  return{
-         loginApi:"http://localhost:8809/api/login",
-  	  	 phone:"",
+         loginApi:"http://localhost:8802/api/admin/login",
+  	  	 account:"",
   	  	 password:""
   	  }
   },
   methods: {
       loginCheck:function(){
-      	  this.$post(this.loginApi,{phone:this.phone,password:this.password}).then(result => {
+      	  this.$post(this.loginApi,{account:this.account,password:this.password}).then(result => {
               layer.msg("登录成功",{icon:1});
-              store.commit('setLoginUser', result.user)
+              //console.log(result);
+              store.commit('setLoginUser', result.result)
               store.commit('setLoginToken', result.token)
-              this.$router.push("/");
+
+              this.$router.push('/');
 			    });
       }
   }
@@ -66,7 +68,7 @@ html, body, .container-table {
   padding: 3em;
 }
 .loginForm .input-group {
-  padding-bottom: 1em;
+  padding-bottom: 2em;
   height: 3em;
 }
 .input-group input {

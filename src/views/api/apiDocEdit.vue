@@ -41,6 +41,10 @@
                 <td>参数说明</td>
                 <td colspan="3"><textarea rows="5" name="params_descr" v-model="apidocInfo.params_descr" class="form-control input-sm"></textarea></td>
             </tr>
+            <tr>
+                <td>备注说明</td>
+                <td colspan="3"><textarea rows="3" name="remark" v-model="apidocInfo.remark" class="form-control input-sm"></textarea></td>
+            </tr>
         </table>
     </form>
 </template>

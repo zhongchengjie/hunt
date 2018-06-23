@@ -27,9 +27,9 @@
             <li class="dropdown user user-menu">
               <a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown">
                 <!-- The user image in the navbar-->
-                <img src="/static/img/avator.png" class="user-image" alt="User Image">
+                <img src="/static/img/avatar.jpg" class="user-image" alt="User Image">
                 <!-- hidden-xs hides the username on small devices so only the image appears. -->
-                <span class="hidden-xs">www</span>
+                <span class="hidden-xs">{{userName}}</span>
               </a>
             </li>
           </ul>
@@ -38,7 +38,7 @@
     </header>
 
    <!-- Left side column. contains the logo and sidebar -->
-    <sidebar display-name="www" picture-url="/static/img/avator.png" />
+    <sidebar :display-name="userName" picture-url="/static/img/avatar.jpg" />
 
     <!-- Content Wrapper. Contains page content -->
     <div class="content-wrapper">
@@ -75,72 +75,73 @@ export default {
   data: function () {
     return {
       year: new Date().getFullYear(),
+      userName: JSON.parse(localStorage.getItem("user")).user_name
     }
-  },
-  computed: {
-
-  },
-  methods: {
-
   }
 }
 </script>
 
 <style lang="scss">
-.wrapper.fixed_layout {
-  .main-header {
-    position: fixed;
-    width: 100%;
+  .wrapper{
+    height: 100%
   }
-
-  .content-wrapper {
-    padding-top: 50px;
+  .content-wrapper{
+    height: 100%
   }
+  .wrapper.fixed_layout {
+    .main-header {
+      position: fixed;
+      width: 100%;
+    }
 
-  .main-sidebar {
-    position: fixed;
-    height: 100vh;
-  }
-}
+    .content-wrapper {
+      padding-top: 50px;
+    }
 
-.wrapper.hide_logo {
-  @media (max-width: 767px) {
-    .main-header .logo {
-      display: none;
+    .main-sidebar {
+      position: fixed;
+      height: 100vh;
     }
   }
-}
 
-.logo-mini,
-.logo-lg {
-  text-align: left;
-
-  img {
-    padding: .4em !important;
+  .wrapper.hide_logo {
+    @media (max-width: 767px) {
+      .main-header .logo {
+        display: none;
+      }
+    }
   }
-}
 
-.logo-lg {
-  img {
-    display: -webkit-inline-box;
-    width: 25%;
+  .logo-mini,
+  .logo-lg {
+    text-align: left;
+
+    img {
+      padding: .4em !important;
+    }
   }
-}
 
-.user-panel {
-  height: 4em;
-}
+  .logo-lg {
+    img {
+      display: -webkit-inline-box;
+      width: 25%;
+    }
+  }
 
-hr.visible-xs-block {
-  width: 100%;
-  background-color: rgba(0, 0, 0, 0.17);
-  height: 1px;
-  border-color: transparent;
-}
-.content-header .breadcrumb{
-  left:10px;
-  font-size:14px;
-  float:none
-}
+  .user-panel {
+    height: 4em;
+  }
+
+  hr.visible-xs-block {
+    width: 100%;
+    background-color: rgba(0, 0, 0, 0.17);
+    height: 1px;
+    border-color: transparent;
+  }
+  .content-header .breadcrumb{
+    left:10px;
+    font-size:14px;
+    float:none
+  }
 
 </style>

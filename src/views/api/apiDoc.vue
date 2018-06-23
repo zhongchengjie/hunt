@@ -8,9 +8,8 @@
   		  	 <div class="ibox-content-search row">
   		  	 	    <div class="col-sm-3">
   		  	 	    	  <button type="button" class="btn btn-primary btn-sm" @click="showModal(1)">添加API说明</button>
-  		  	 	    	  <button type="button" class="btn btn-primary btn-sm" @click="test" style="margin-left:10px">测试</button>
   		  	 	    </div>
-  		  	 	    <div class="col-sm-6">
+  		  	 	    <div class="col-sm-9">
   		  	 	    	  <form class="form-inline">
                          <div class="input-group pull-right" style="width:240px">
                               <input v-model="searchCon.inputText" type="text" placeholder="请输入API名称或API描述" class="input-sm form-control">
@@ -46,6 +45,7 @@
 		                <th>是否需要token</th>
 		                <th>所需参数</th>
 		                <th>参数说明</th>
+                    <th>备注说明</th>
                     <th>操作</th>
 		             </tr>
 		          </thead>
@@ -58,6 +58,7 @@
 		                <td>{{ifNeedToken(apiDoc.need_token)}}</td>
 		                <td>{{apiDoc.api_params}}</td>
 		                <td v-html="Util.newLineText(apiDoc.params_descr)"></td>
+                    <td>{{apiDoc.remark}}</td>
                     <td><a href="javascript:void(0)" @click="showModal(2,apiDoc._id)">编辑</a> - <a href="javascript:void(0)">删除</a></td>
                  </tr>
 		          </tbody>
@@ -67,7 +68,7 @@
 		      </table>
   		  </div><!--end of ibox-content-->
   	</div>
-    <modal :name="modalName"  :width="520" :height="440" :pivotY="0.3" :pivotX="0.6">
+    <modal :name="modalName"  :width="560" :height="520" :pivotY="0.3" :pivotX="0.6">
 	      <modal-header :modal-title="modalTitle" :modal-name="modalName"></modal-header>
 	      <div class="modal-body">
            <apidoc-edit :apidoc-info="apiDocInfo"></apidoc-edit>
@@ -104,7 +105,8 @@ export default {
           api_method: "",
           api_params:"",
           params_descr:"",
-          need_token:""
+          need_token:"",
+          remark:""
         },
         searchCon:{inputText:"",method:"",module:""},
         queryApi:"api/apiDoc/get",
@@ -133,7 +135,7 @@ export default {
     showModal:function(type,id){
       if(type==1){
         this.modalTitle = "添加API说明";
-        this.apiDocInfo = { _id:"",api_name: "",api_descr:"",api_module:"",api_method: "post",api_params:"",params_descr:"",need_token:1};
+        this.apiDocInfo = { _id:"",api_name: "",api_descr:"",api_module:"",api_method: "post",api_params:"",params_descr:"",need_token:1,remark:""};
       }
       else{
         this.modalTitle = "修改API说明";
@@ -181,7 +183,7 @@ export default {
     	 var task3 = this.$post(this.editApi,{apiDocInfo:apiDocInfo3});
     	 //并行执行任务。其中某个任务出错时，并不会影响其它并行任务的执行。
     	 Promise.all([task1, task2]).then(function (results) {
-			    console.log(results);   
+			    console.log(results);
 			 }).catch(err=>{
 			 	  console.log(err);
 			 })
@@ -189,6 +191,7 @@ export default {
 			 /*task1.then(task2).catch(err=>{
 			 	  console.log(err);
 			 })*/
+			 //应用到数据字典？
     }
   }
 }
