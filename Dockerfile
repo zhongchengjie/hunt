@@ -7,10 +7,10 @@ COPY dist/ /app
 WORKDIR /app
 
 # 安装项目依赖
-RUN ["npm", "install"]
+# RUN ["npm", "install"]
 
 # 容器对外暴露的端口号
 EXPOSE 8803/tcp
 
 # 容器启动时执行的命令，类似npm run start
-CMD ["npm", "start"]
+# CMD ["npm", "start"]
