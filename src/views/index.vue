@@ -67,6 +67,8 @@
 
 <script>
 import sidebar from '../components/sidebar'
+import 'hideseek'
+
 export default {
   name: 'index',
   components: {

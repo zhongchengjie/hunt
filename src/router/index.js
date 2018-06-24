@@ -9,6 +9,10 @@ import heroView from '@/views/hero/heroList'
 import botView from '@/views/bot/botList'
 import storeView from '@/views/bot/storeList'
 import apiDocView from '@/views/api/apiDoc'
+import apiDebugView from '@/views/api/apiDebug'
+import userAccountView from '@/views/account/userAccount'
+import accountDetailView from '@/views/account/accountDetail'
+import depositListView from '@/views/account/depositList'
 import modelView from '@/views/model/modelInfo'
 
 Vue.use(Router)
@@ -27,7 +31,7 @@ export default new Router({
         {
           path: 'dashboard',
           component: dashboardView,
-          alias: '',
+          alias: '',           //alias：路径别名，当路径为''时，加载dashboardView组件
           name: '仪表盘',
           meta: {description: ''}
         },{
@@ -59,6 +63,26 @@ export default new Router({
           path: 'api/doc',
           component: apiDocView,
           name: 'API文档',
+          meta: {description: ''}
+        }, {
+          path: 'api/debug',
+          component: apiDebugView,
+          name: 'API调试',
+          meta: {description: ''}
+        },{
+          path: 'account/list',
+          component: userAccountView,
+          name: '用户账户',
+          meta: {description: ''}
+        },{
+          path: 'account/detail',
+          component: accountDetailView,
+          name: '账户明细',
+          meta: {description: ''}
+        },{
+          path: 'account/deposit',
+          component: depositListView,
+          name: '充值记录',
           meta: {description: ''}
         },{
           path: 'api/model',

@@ -41,8 +41,8 @@
 		                <th>api名称</th>
 		                <th>api描述</th>
                     <th>所属模块</th>
-		                <th>请求方式</th>
-		                <th>是否需要token</th>
+		                <th class="text-center">请求方式</th>
+		                <th class="text-center">需要token</th>
 		                <th>所需参数</th>
 		                <th>参数说明</th>
                     <th>备注说明</th>
@@ -54,8 +54,8 @@
 		                <td>{{apiDoc.api_name}}</td>
 		                <td>{{apiDoc.api_descr}}</td>
                     <td>{{apiDoc.api_module}}</td>
-		                <td>{{apiDoc.api_method}}</td>
-		                <td>{{ifNeedToken(apiDoc.need_token)}}</td>
+		                <td class="text-center">{{apiDoc.api_method}}</td>
+		                <td class="text-center">{{apiDoc.need_token==1?"√":"×"}}</td>
 		                <td>{{apiDoc.api_params}}</td>
 		                <td v-html="Util.newLineText(apiDoc.params_descr)"></td>
                     <td>{{apiDoc.remark}}</td>
@@ -125,13 +125,6 @@ export default {
              this.apiDocList = result.result;
 			  });
   	},
-    ifNeedToken:function(flag){
-        if(flag==1){
-            return "需要"
-        }else{
-            return "不需要"
-        }
-    },
     showModal:function(type,id){
       if(type==1){
         this.modalTitle = "添加API说明";

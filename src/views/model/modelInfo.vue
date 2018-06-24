@@ -2,7 +2,7 @@
   <section class="content">
   	<div class="ibox">
   		  <div class="ibox-title">
-  		  	  <h5>Model管理<span style="color:#999;font-weight:normal;">（下拉选择模型以查看其详细信息）</span><a style="margin-left:10px;cursor: pointer" title="刷新Model"><span class="glyphicon glyphicon-refresh"></span></a></h5>
+  		  	  <h5>Model管理<span style="color:#999;font-weight:normal;"> (下拉选择模型以查看其详细信息) </span><a style="margin-left:10px;cursor: pointer" title="刷新Model"><span class="glyphicon glyphicon-refresh"></span></a></h5>
   		  </div><!--end of ibox-title-->
   		  <div class="ibox-content">
   		  	 <div class="ibox-content-search row">
