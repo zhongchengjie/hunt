@@ -1,6 +1,7 @@
 import axios from 'axios'
 
-axios.defaults.baseURL = 'http://localhost:8809';
+/*axios.defaults.baseURL = 'http://localhost:8809';*/
+axios.defaults.baseURL = 'http://120.79.129.124:8809';
 axios.defaults.timeout = 5000;
 
  //添加一个请求拦截器
