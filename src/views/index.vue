@@ -85,7 +85,8 @@ export default {
 
 <style lang="scss">
   .wrapper{
-    height: 100%
+    height: 100%;
+    overflow-y:auto
   }
   .content-wrapper{
     height: 100%

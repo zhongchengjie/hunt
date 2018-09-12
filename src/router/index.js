@@ -14,6 +14,7 @@ import userAccountView from '@/views/account/userAccount'
 import accountDetailView from '@/views/account/accountDetail'
 import depositListView from '@/views/account/depositList'
 import modelView from '@/views/model/modelInfo'
+import notFoundView from '@/components/404.vue'
 
 Vue.use(Router)
 
@@ -90,6 +91,10 @@ export default new Router({
           name: 'Model',
           meta: {description: ''}
         }]
+    }, {
+      // not found handler
+      path: '*',
+      component: notFoundView
     }
   ],
   mode: 'history',

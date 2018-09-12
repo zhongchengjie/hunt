@@ -34,7 +34,7 @@ router.beforeEach((to, from, next) => {
        query: { redirect: to.fullPath }
     })
   } else {
-    next()
+    next();
   }
 })
 

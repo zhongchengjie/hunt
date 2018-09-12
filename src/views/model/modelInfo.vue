@@ -72,7 +72,7 @@ export default {
   	getModelName:async function(){
   	    //先获取已定义的模型，回填select
         try{
-           let result =  await this.$fetch("http://120.79.129.124:8802/api/model/name/get");
+           let result =  await this.$fetch("http://localhost:8802/api/model/name/get");
            this.modelNames = result.result;
            this.modelNames.length>0?this.modelName = this.modelNames[0]:"";
         }catch(err){
@@ -83,14 +83,14 @@ export default {
   	    if(this.modelNames.length==0){
            await this.getModelName();
         }
-        this.$fetch("http://120.79.129.124:8802/api/model/descr/get",{modelName:this.modelName}).then(result=>{
+        this.$fetch("http://localhost:8802/api/model/descr/get",{modelName:this.modelName}).then(result=>{
             this.modelInfoList = result.result;
         }).catch(err=>{
             layer.msg("请先同步模型！",{icon:7});
         })
     },
     asyncModel:function(type){
-        this.$fetch("http://120.79.129.124:8802/api/model/sync",{modelName:this.modelName,type:type}).then(()=>{
+        this.$fetch("http://localhost:8802/api/model/sync",{modelName:this.modelName,type:type}).then(()=>{
            layer.msg("同步成功",{icon:1});
       })
     }

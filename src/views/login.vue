@@ -27,7 +27,7 @@ export default {
   name: 'login',
   data: function(){
   	  return{
-         loginApi:"http://120.79.129.124:8802/api/admin/login",
+         loginApi:"http://localhost:8802/api/admin/login",
   	  	 account:"",
   	  	 password:""
   	  }
@@ -71,7 +71,7 @@ html, body, .container-table {
   padding-bottom: 2em;
   height: 3em;
 }
-.input-group input {
+.loginForm .input-group input {
   height: 4em;
 }
 </style>

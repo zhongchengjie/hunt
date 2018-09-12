@@ -45,7 +45,7 @@
 		        <span class="page">机器人库存</span>
 		      </a>
 		    </router-link>
-		    <router-link tag="li" class="pageLink" to="/assset">
+		    <router-link tag="li" class="pageLink" to="">
 		      <a>
 		        <i class="fa fa-tasks"></i>
 		        <span class="page">饰品信息</span>
